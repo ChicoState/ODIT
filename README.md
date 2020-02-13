@@ -6,3 +6,6 @@ Purpose of ODIT
 * John Higdon, VioletInferno
 * Lars Norine, lcnorine
 * Daniel Ellingson, dellingson
+
+### Entrepreneurs
+
