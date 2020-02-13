@@ -5,7 +5,7 @@ Purpose of ODIT
 * Cody Evans, Codemastr3
 * John Higdon, VioletInferno
 * Lars Norine, lcnorine
-* Daniel Ellingson, dellingson
+* Daniel Ellingson, Asterisk007
 
 ### Entrepreneurs
 
