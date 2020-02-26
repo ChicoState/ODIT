@@ -1,0 +1,13 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+	<title>{{ title }}</title>
+	<link rel="stylesheet" href="{% static "css/foundation.css" %}">
+	<link rel="stylesheet" href="{% static "css/app.css" %}">
+    </head>
+    <body>
+	<p>{{ hello }}</p>
+	<p><img src={{ cup }} height=500/></p>
+    </body>
+</html>
