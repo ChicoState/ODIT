@@ -10,18 +10,20 @@
 		<!-- jQuery library -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		
+        <script src="js/set-page-theme.js"></script>
+
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" id="style" href="styles.css">
+		<link onload="load_theme()" rel="stylesheet" id="style" href="styles.css">
   	</head>
   	<body>
-		<nav class="navbar navbar-default navbar-fixed-top">
+		<nav class="navbar navbar-default fixed-top">
 			<div class="navbar-expand-lg">
 				<a class="navbar-brand" href="index.html"><img alt="ODIT"></a>
-				<a class="nav-item active" href="request.html">Submit Request</a>
-				<a class="nav-item" href="#">About Us</a>
+				<a class="nav-item" href="request.html">Submit Request</a>
+				<a class="nav-item active">About Us</a>
 			</div>
 			<div class="justify-content-right">
 				<button id="toggle-dark-mode" onclick="tdm()">☀️</button>
@@ -35,6 +37,6 @@
 			</div>
 		</div>
 		<script src="js/cookie-setup.js"></script>
-		<script src="js/toggle-dark-mode.js"></script>
+		<script src="js/set-page-theme.js"></script>
 	</body>
 </html>

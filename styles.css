@@ -1,33 +1,48 @@
+body {
+  padding-top: 80px;
+}
+
 .hint {
-	color: rgb(48.4%, 48.4%, 48.4%);
-	font-size: x-small;
+  color: #7b7b7b;
+  font-size: x-small;
+}
+
+.navbar {
+  height: 64px;
+  margin: 0px;
+  padding: 0px;
+  background-color: gray;
 }
 
 .navbar-brand {
-	background: gray;
-	color: white;
-	padding: 5px 10px 5px 10px;
+  margin: 0px;
+  background: gray;
+  color: white;
+  padding: 16px 10px 16px 10px;
+  /* height: 100%; */
 }
 .navbar-brand:hover {
-	color: white;
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .nav-item {
-	color: rgb(100%, 100%, 100%);
-	margin: 5px;
-	padding: 10px;
-	background: rgb(30.8%, 35.4%, 100%);
-	border-radius: 5px;
+  color: white;
+  margin: 0px;
+  padding: 24px 10px 22px 10px;
+  /* background: rgb(30.8%, 35.4%, 100%); */
+  /* border-radius: 5px; */
 }
 
-.nav-item:hover {
-	color: rgb(100%, 100%, 100%);
+.active {
+  color: #444444;
+  background-color: white;
 }
 
 #toggle-dark-mode {
-	font-size: 25px;
-	padding: 5px;
-	border: none;
-	background: none;
+  font-size: 25px;
+  padding: 14px 10px 11px 10px;
+  border: none;
+  background: none;
 }
+
+/*# sourceMappingURL=styles.css.map */

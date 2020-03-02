@@ -1,54 +1,57 @@
 /* Like regular styles.css, but dark mode */
 body {
-	color: white;
-	background: gray;
+  padding-top: 80px;
+  color: #c4c4c4;
+  background: #414141;
 }
 
-input {
-	color: white;
-	background: black;
-}
-
-select {
-	color: white;
-	background: black;
-}
-
-textarea {
-	color: white;
-	background: black;
+input, select, textarea {
+  color: #f0f0f0;
+  background: #777777;
 }
 
 .hint {
-	color: rgb(48.4%, 48.4%, 48.4%);
-	font-size: x-small;
+  color: #7b7b7b;
+  font-size: x-small;
+}
+
+.navbar {
+  height: 64px;
+  margin: 0px;
+  padding: 0px;
+  background-color: steelblue;
 }
 
 .navbar-brand {
-	background: gray;
-	color: white;
-	padding: 5px 10px 5px 10px;
+  margin: 0px;
+  /* background: darkgray; */
+  color: white;
+  padding: 16px 10px 16px 10px;
 }
 .navbar-brand:hover {
-	color: white;
-	text-decoration: underline;
+  color: white;
+  text-decoration: underline;
 }
 
 .nav-item {
-	color: rgb(100%, 100%, 100%);
-	margin: 5px;
-	padding: 10px;
-	background: rgb(30.8%, 35.4%, 100%);
-	border-radius: 5px;
+  color: white;
+  margin: 0px;
+  padding: 24px 10px 22px 10px;
+  /* background: rgb(30.8%, 35.4%, 100%); */
+}
+.nav-item:hover {
+  color: white;
 }
 
-.nav-item:hover {
-	color: rgb(100%, 100%, 100%);
+.active {
+  background-color: #414141;
 }
 
 #toggle-dark-mode {
-	font-size: 25px;
-	padding: 5px;
-	border: none;
-	background: none;
+  font-size: 25px;
+  padding: 14px 10px 11px 10px;
+  border: none;
+  background: none;
 }
+
+/*# sourceMappingURL=styles-dark.css.map */
