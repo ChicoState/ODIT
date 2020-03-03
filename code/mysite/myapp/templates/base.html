@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+</head>
+<body>
+    <ul class="navbar">
+        <li><a href="/" id="left">ODIT</a></li>
+        <li><a href="submit.html" id="left">Submit Request</a></li>
+        <li><a href="viewissues.html" id="left">View Requests</a></li>
+        <li><a href="/" id="left">About Us</a></li>
+    </ul>
+    
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

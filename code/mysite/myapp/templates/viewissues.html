@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if issues_list %}
+
+{% for i in issues_list %}
+<p><b>Ticket # {{ i.id }}</b></p>
+<li>Title: {{ i.title }}</li>
+<li>Description: {{ i.description }}</li>
+<li>Date Created: {{ i.date_created }}</li>
+<li>Issue_type: {{ i.issue_type }}</li>
+<li>Assigned_user: {{ i.assigned_user }}</li>
+<li>Affected_user: {{ i.affected_user }}</li>
+<li>Is_solved?: {{ i.is_solved }}</li>
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}
