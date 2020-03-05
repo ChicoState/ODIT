@@ -67,3 +67,6 @@ def viewissues(request):
         "form":form
     }
     return render(request, "viewissues.html", context=context)
+
+def about(request):
+    return render(request, "aboutodit.html")

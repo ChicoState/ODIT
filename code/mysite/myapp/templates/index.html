@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p>{{ info }}</p>
-<p>{{ how }}</p>
-<p>{{ desc }}</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1><ul>{{info}}</ul></h1>
+            <h2>{{how}}</h2>
+            <p>{{desc}}</p>
+            <a><button>GET STARTED TODAY!</button></a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
