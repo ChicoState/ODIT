@@ -1,13 +1,13 @@
 # ODIT (OnDemandIT)
-Purpose of ODIT
+The purpose of this project is to provide better accessability to users for finding IT support
 
 ### Developers
 * Cody Evans, Codemastr3
+* Daniel Ellingson, Asterisk007
 * John Higdon, VioletInferno
 * Lars Norine, lcnorine
-* Daniel Ellingson, Asterisk007
 
 ### Entrepreneurs
-* Fumiko Morimoto, 
 * Devon Lawton, Dlawton48
+* Fumiko Morimoto, morimotofumiko
 * Wendy Danning, wendwest2
