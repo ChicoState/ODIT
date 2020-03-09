@@ -2,18 +2,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+	{% include 'bootstrap_css.html' %}
     <title>{{ title }}</title>
-    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
-    <ul class="navbar">
-        <li><a href="/" id="left">ODIT</a></li>
-        <li><a href="submit.html" id="left">Submit Request</a></li>
-        <li><a href="viewissues.html" id="left">View Requests</a></li>
-        <li><a href="/" id="left">About Us</a></li>
-    </ul>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+		<a class="navbar-brand" href="/">ODIT</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsiblebuttons"><span class="navbar-toggler-icon"></span></button>
+		<div class="collapse navbar-collapse" id="collapsiblebuttons">
+			<ul class="nav navbar-nav">
+				<li class="nav-item"><a class="nav-link" href="submit.html">Submit Request</a></li>
+				<li class="nav-item"><a class="nav-link" href="viewissues.html">View Requests</a></li>
+				<li class="nav-item"><a class="nav-link" href="/" id="left">About Us</a></li>
+			</ul>
+			<ul class="nav navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="signup.html"><span>👤</span>Sign Up</a></li>
+				<li class="nav-item"><a class="nav-link" href="login.html">🔒<span></span>Log In</a></li>
+			</ul>
+		</div>
+    </nav>
     
     {% block content %}
     {% endblock %}
+	
+	{% include 'bootstrap_js.html' %}
 </body>
 </html>
