@@ -3,7 +3,7 @@
 
 <center>
 <p>Submit request: </p>
-<form action="/" method="post" enctype="multipart/form-data">
+<form action="/submit.html" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
