@@ -8,4 +8,6 @@ Purpose of ODIT
 * Daniel Ellingson, Asterisk007
 
 ### Entrepreneurs
-
+* Fumiko Morimoto, 
+* Devon Lawton, Dlawton48
+* Wendy Danning, wendwest2
