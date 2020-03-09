@@ -1,4 +1,5 @@
-body {
+/*Let's try to keep the hardcoded CSS to a minimum, especially in terms of layout. I've commented it all out to demonstrate a page layout using just Bootstrap.*/
+/*body {
     background-color: white;
 }
 
@@ -41,4 +42,4 @@ body {
 
 .active {
     background-color: #6600ff;
-}
+}*/
