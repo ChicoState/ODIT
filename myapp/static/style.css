@@ -1,18 +1,6 @@
-@media (prefers-color-scheme: light){    
-    .navbar {
-      background-color: gray;
-    }
-  
-    .navbar-brand {
-      background: gray;
-      color: white;
-    }
+@media (prefers-color-scheme: light){
     .navbar-brand:hover {
       text-decoration: underline;
-    }
-  
-    .nav-item {
-      color: white;
     }
   
     .active {
@@ -28,10 +16,15 @@
       background: #414141;
     }
   
-    input, select, textarea {
+    .form-control {
       color: #f0f0f0;
       background: #777777;
     }
+    .form-control:focus {
+      color: #f0f0f0;
+      background: #9b9b9b;
+    }
+
     .navbar {
       background-color: steelblue;
     }

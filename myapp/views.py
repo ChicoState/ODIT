@@ -6,9 +6,9 @@ from . import forms
 def index(request, page=0):
 
     context = {
-        "title":"ODIT - On Demand IT",
+        "title":"On Demand IT",
         "info":"A new way to find IT professionals.",
-        "how":"How it works: ",
+        "how":"How IT works: ",
         "desc":"Send in a request --> A registered ODITer who has the skills needed receives the request --> They help out. ",
     }
    
