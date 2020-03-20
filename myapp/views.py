@@ -11,7 +11,6 @@ def index(request, page=0):
         "how":"How it works: ",
         "desc":"Send in a request --> A registered ODITer who has the skills needed receives the request --> They help out. ",
     }
-
    
     return render(request, "index.html", context=context)
 
@@ -39,3 +38,6 @@ def viewissues(request):
         "issues_list":issues_list,
     }
     return render(request, "viewissues.html", context=context)
+
+def about(request):
+    return render(request, "aboutodit.html")

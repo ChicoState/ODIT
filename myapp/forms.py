@@ -3,42 +3,62 @@ from . import models
 
 class IssueForm(forms.Form):
     title = forms.CharField(
-        label='title',
+        widget = forms.TextInput(
+            attrs={'class': 'form-control'}
+        ),
+        label='Title',
         required=True,
         max_length=100
     )
 
     description = forms.CharField(
-        label='description',
-        widget=forms.Textarea,
+        label='Description',
+        widget=forms.Textarea(
+            attrs={'class': 'form-control'}
+        ),
         required=False,
         max_length=240
     )
 
     issue_type = forms.IntegerField(
-        label='issue_type',
+        widget = forms.TextInput(
+            attrs={'class': 'form-control'}
+        ),
+        label='Issue Type',
         required=True
     )
 
     date_created = forms.CharField(
-        label='date_created',
+        widget = forms.TextInput(
+            attrs={'class': 'form-control'}
+        ),
+        label='Date Created',
         required=True,
     )
 
     assigned_user = forms.CharField(
-        label='assigned_user',
+        widget = forms.TextInput(
+            attrs={'class': 'form-control'}
+        ),
+        label='Assigned User',
         required=False,
         max_length=50
     )
 
     affected_user = forms.CharField(
-        label='affected_user',
+        widget = forms.TextInput(
+            attrs={'class': 'form-control'}
+        ),
+        label='Affected User',
         required=True,
         max_length=50,
     )
 
     is_solved = forms.BooleanField(
-        label='is_solved'
+        widget = forms.CheckboxInput(
+            attrs={'class':'form-check'}
+        ),
+        label='Is this issue solved?'
     )
 
     def save(self):
