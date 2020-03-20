@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
+<form method="post" enctype="multipart/form-data">
+	<div class="form-group">
+	{% csrf_token %}
+	<table>{{ form.as_table }}</table>
+	<input type="submit" class="btn btn-primary" value="Filter">
+	</div>
+</form>
+
 {% if issues_list %}
 
 <div class="container">
@@ -19,7 +27,8 @@
         </div>
     </div>
 </div>
-
+{% else %}
+<p>There are no entries with those parameters.</p>
 {% endif %}
 
 {% endblock %}
