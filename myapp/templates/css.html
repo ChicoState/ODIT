@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block css %}
+
+<link rel="stylesheet" type="text/css" id="style" href="{% static 'css/styles.css' %}">
+
+<!-- FIXME: Dynamically change page theme based on user preference. -->
+{% comment %}
+{% load js %}
+
+<script src="{% static 'js/set-page-theme.js' %}"></script>
+
+{% if style == 0 %}
+<link rel="stylesheet" type="text/css" id="style" href="{% static 'css/styles.css' %}">
+{% else %}
+<link rel="stylesheet" type="text/css" id="style" href="{% static 'css/styles-dark.css' %}">
+{% endif %}
+{% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+	<div class="form-group">
+	{% csrf_token %}
+	<table>{{ form.as_table }}</table>
+	<input type="submit" class="btn btn-primary" value="Filter">
+	</div>
+</form>
+
+{% if issues_list %}
+
+<div class="container">
+    <div class="row">
+        <div class="column">
+            {% for i in issues_list %}
+            <h4><p><b>Ticket # {{ i.id }}</b></p></h4>
+            <li>Title: {{ i.title }}</li>
+            <li>Description: {{ i.description }}</li>
+            <li>Date Created: {{ i.date_created }}</li>
+            <li>Issue_type: {{ i.issue_type }}</li>
+            <li>Assigned_user: {{ i.assigned_user }}</li>
+            <li>Affected_user: {{ i.affected_user }}</li>
+            <li>Is_solved?: {{ i.is_solved }}</li><br>
+            {% endfor %}  
+        </div>
+    </div>
+</div>
+{% else %}
+<p>There are no entries with those parameters.</p>
+{% endif %}
+
+{% endblock %}

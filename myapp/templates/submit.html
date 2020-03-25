@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<!-- <center> -->
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="d-flex flex-column align-items-center">
+            <div class="col align-items-left"><p>Submit request: </p></div>
+            <form action="/submit.html" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                {% csrf_token %}
+                <table>{{ form.as_table }}</table>
+                <input type="submit" class="btn btn-primary" value="Submit Request">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+@media (prefers-color-scheme: light){
+	.navbar {
+		background-color: gray;	
+	}
+
+	.navbar-brand {
+		background: gray;
+		color: white;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.nav-item {
+		color: rgb(100%, 100%, 100%);	
+	}
+
+	.active {
+		color: rgba($color: #444444, $alpha: 1.0);
+		background-color: rgba($color: #FFFFFF, $alpha: 1.0);
+	}
+}
+
+@media (prefers-color-scheme: dark){
+	/* Like regular styles.css, but dark mode */
+	$dark-text: rgba(196,196,196,1);
+	$form-text: rgba(240,240,240,1);
+	$page-background: rgba(65,65,65,1);
+
+	body {
+		color: rgba($color: $dark-text, $alpha: 1.0);
+		background: $page-background;
+	}
+
+	input, select, textarea {
+		color: $form-text;
+		background: rgba(119, 119, 119, 1);
+	}
+
+	.navbar {
+		background-color: steelblue;
+	}
+
+	.navbar-brand {
+		color: white;
+		
+		&:hover {
+			color: white;
+			text-decoration: underline;
+		}
+	}
+
+	.nav-item {
+		color: rgb(100%, 100%, 100%);
+
+		&:hover {
+			color: white;
+		}
+	}
+
+	.active {
+		background-color: $page-background;
+	}
+}
