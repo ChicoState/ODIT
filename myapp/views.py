@@ -5,7 +5,6 @@ from . import forms
 
 # Create your views here.
 def index(request, page=0):
-
 	context = {
 		"title":"ODIT - On Demand IT",
 		"info":"A new way to find IT professionals.",
@@ -62,3 +61,6 @@ def viewissues(request):
 
 def about(request):
 	return render(request, "aboutodit.html")
+
+def signup(request):
+	return render(request, "signup.html")

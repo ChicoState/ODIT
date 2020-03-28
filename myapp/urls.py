@@ -23,5 +23,6 @@ urlpatterns = [
     path('index.html', views.index),
     path('submit.html', views.submit),
     path('viewissues.html', views.viewissues),
-    path('aboutodit.html', views.about)
+    path('aboutodit.html', views.about),
+    path('signup.html', views.signup)
 ]
