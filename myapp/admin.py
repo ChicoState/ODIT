@@ -3,4 +3,4 @@ from . import models
 
 # Register your models here.
 admin.site.register(models.Issue_Model)
-admin.site.register(models.User_Model)
+admin.site.register(models.Profile)
