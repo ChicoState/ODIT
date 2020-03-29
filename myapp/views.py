@@ -1,11 +1,13 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Q #allows complex query lookups
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 from . import models
 from . import forms
 
 # Create your views here.
 def index(request, page=0):
-
 	context = {
 		"title":"ODIT - On Demand IT",
 		"info":"A new way to find IT professionals.",
@@ -15,6 +17,7 @@ def index(request, page=0):
    
 	return render(request, "index.html", context=context)
 
+@login_required
 def submit(request):
 	if request.method == "POST":
 		form = forms.IssueForm(request.POST)
@@ -25,11 +28,12 @@ def submit(request):
 		form = forms.IssueForm()
 
 	context = {
-		"title":"ODIT - Make Request",
+		"title":"ODIT - Submit Request",
 		"form":form
 	}
 	return render(request, "submit.html", context=context)
 
+@login_required
 def viewissues(request):
 	if request.method == "POST":
 		form = forms.IssueFilter(request.POST)
@@ -61,4 +65,26 @@ def viewissues(request):
 	return render(request, "viewissues.html", context=context)
 
 def about(request):
-	return render(request, "aboutodit.html")
+	context = {
+		"title":"ODIT - About",
+	}
+	return render(request, "aboutodit.html", context=context)
+
+def register(request):
+    if request.method == "POST":
+        form_instance = forms.RegistrationForm(request.POST)
+        if form_instance.is_valid():
+            form_instance.save()
+            return redirect("/login/")
+
+    else:
+        form_instance = forms.RegistrationForm()
+    context = {
+		"title":"ODIT - Register",
+        "form":form_instance,
+    }
+    return render(request, "registration/register.html", context=context)
+
+def logoff(request):
+	logout(request)
+	return redirect("/login")
