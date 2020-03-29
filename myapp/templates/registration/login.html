@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}ODIT - Login{% endblock %}
+
+{% block content %}
+<!-- FIX: Let's make this look more appealing. -->
+<div class="row justify-content-center align-items-center">
+    <div class="d-flex flex-column align-items-center">
+        <div class="col align-items-left">
+            <h3 class="text-center">Login</h3>
+            <form action="/login/" method="post" class="text-center">
+                {% csrf_token %}
+                
+                <label>{{ form.username.label_tag }}</label>
+                {{ form.username }}
+                <br>
+                <label>{{ form.password.label_tag }}</label>
+                {{ form.password }}
+                <br>
+                <!-- FIX: this isn't outputting a readable error. -->
+                {% for error in form.errors %}
+                    <p style="color: red">{{error}}</p>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary" value="Login" />
+                <input type="hidden" name="next" value="{{ request.GET.next }}" />
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
