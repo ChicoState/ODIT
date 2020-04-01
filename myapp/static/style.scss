@@ -1,3 +1,7 @@
+.card {
+	color: white;
+}
+
 @media (prefers-color-scheme: light){
 	.navbar {
 		background-color: gray;	
@@ -32,9 +36,13 @@
 		background: $page-background;
 	}
 
-	input, select, textarea {
-		color: $form-text;
-		background: rgba(119, 119, 119, 1);
+	.form-control {
+		color: #f0f0f0;
+		background: #777777;
+	  	&:focus {
+			color: #f0f0f0;
+			background: #9b9b9b;
+	  	}
 	}
 
 	.navbar {
