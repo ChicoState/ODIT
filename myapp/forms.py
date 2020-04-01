@@ -94,7 +94,10 @@ class IssueForm(forms.Form):
 class IssueFilter(forms.Form):
 	keyword = forms.CharField(
 		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
+			attrs={
+				'class': 'form-control font-weight-normal',
+				'id': 'keyword'
+			}
 		),
 		label='Filter by Keyword',
 		required=False,
@@ -103,7 +106,10 @@ class IssueFilter(forms.Form):
 
 	issue_type = forms.IntegerField(
 		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
+			attrs={
+				'class': 'form-control font-weight-normal',
+				'id': 'issue_type'
+			}
 		),
 		label='Filter by Issue Type',
 		required=False
