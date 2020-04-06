@@ -8,7 +8,9 @@
             <h3>{{info}}</h3>
             <h2>{{how}}</h2>
             <img class="d-block w-100" src="{% static "img/how-it-works-chart.png" %}" alt="{{desc}}">
-            <a href="signup.html"><button class="btn btn-primary">Get Started Today</button></a>
+            {% if user.is_anonymous %}
+                <a href="/register"><button class="btn btn-primary">Get Started Today</button></a>
+            {% endif %}
             <br style="margin: 10px;">
             <div id="customer_reviews" class="carousel slide" data-ride="carousel" style="width: 400px;">
                 <div class="carousel-inner">
