@@ -1,57 +1,67 @@
-@media (prefers-color-scheme: light){    
-    .navbar {
-      background-color: gray;
-    }
-  
-    .navbar-brand {
-      background: gray;
-      color: white;
-    }
-    .navbar-brand:hover {
-      text-decoration: underline;
-    }
-  
-    .nav-item {
-      color: white;
-    }
-  
-    .active {
-      color: #444444;
-      background-color: white;
-    }
-} 
-  
-@media(prefers-color-scheme: dark) {
-    /* Like regular styles.css, but dark mode */
-    body {
-      color: #c4c4c4;
-      background: #414141;
-    }
-  
-    input, select, textarea {
-      color: #f0f0f0;
-      background: #777777;
-    }
-    .navbar {
-      background-color: steelblue;
-    }
-  
-    .navbar-brand {
-      color: white;
-    }
-    .navbar-brand:hover {
-      color: white;
-      text-decoration: underline;
-    }
-  
-    .nav-item {
-      color: white;
-    }
-    .nav-item:hover {
-      color: white;
-    }
-  
-    .active {
-      background-color: #414141;
-    }
+.card {
+  color: #f1f1f1;
 }
+
+@media (prefers-color-scheme: light) {
+  .navbar {
+    background-color: gray;
+  }
+
+  .navbar-brand {
+    background: gray;
+    color: white;
+  }
+  .navbar-brand:hover {
+    text-decoration: underline;
+  }
+
+  .nav-item {
+    color: white;
+  }
+
+  .active {
+    color: #444444;
+    background-color: white;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  /* Like regular styles.css, but dark mode */
+  body {
+    color: #c4c4c4;
+    background: #414141;
+  }
+
+  .form-control {
+    color: #f0f0f0;
+    background: #777777;
+  }
+  .form-control:focus {
+    color: #f0f0f0;
+    background: #9b9b9b;
+  }
+
+  .navbar {
+    background-color: steelblue;
+  }
+
+  .navbar-brand {
+    color: white;
+  }
+  .navbar-brand:hover {
+    color: white;
+    text-decoration: underline;
+  }
+
+  .nav-item {
+    color: white;
+  }
+  .nav-item:hover {
+    color: white;
+  }
+
+  .active {
+    background-color: #414141;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

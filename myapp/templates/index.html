@@ -4,11 +4,13 @@
 <div class="container">
     <div class="row justify-content-center align-items-center">
         <div class="d-flex flex-column align-items-center">
-            <h1><ul>{{info}}</ul></h1>
+            <h1 style="text-decoration: underline;">{{title}}</h1>
+            <h3>{{info}}</h3>
             <h2>{{how}}</h2>
-            <p>{{desc}}</p>
-            <a href="signup.html"><button class="btn btn-primary">Get Started Today</button></a>
-
+            <img class="d-block w-100" src="{% static "img/how-it-works-chart.png" %}" alt="{{desc}}">
+            {% if user.is_anonymous %}
+                <a href="/register"><button class="btn btn-primary">Get Started Today</button></a>
+            {% endif %}
             <br style="margin: 10px;">
             <div id="customer_reviews" class="carousel slide" data-ride="carousel" style="width: 400px;">
                 <div class="carousel-inner">

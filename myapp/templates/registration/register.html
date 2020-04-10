@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- FIX: Let's make this look more appealing -->
+<div class="container">
+    <form action="/register/" method="post" class="text-center">
+        <div class="panel panel-default text-center">
+            <h3>Sign Up Today!</h3>
+            {% csrf_token %}
+                {% for field in form %}
+                    <p>
+                        {{ field.label_tag}}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                    </p>
+                {% endfor %}
+            <input type="submit" class="btn btn-primary" value="Register" />
+        </div>
+    </form>
+</div>
+
+{% endblock %}
