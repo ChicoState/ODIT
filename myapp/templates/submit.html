@@ -1,17 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% load static %}
 <div class="container">
     <div class="row justify-content-center align-items-center">
-        <div class="d-flex flex-column align-items-center">
-            <div class="col align-items-left"><p>Submit request: </p></div>
+        {% comment %} Submission form {% endcomment %}
+        <div class="col-sm-1 mx-auto d-flex flex-column align-items-center"></div>
+        <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+            <p>Submit request:
+            <button class="ml-4 btn btn-primary" type="button" data-toggle="collapse" data-target="#user_guide" aria-expanded="false" aria-controls="user_guide">
+                How does this work?
+            </button></p>
+            
             <form action="/submit.html" method="post" enctype="multipart/form-data">
-                <div class="form-group">
+                <div class="form-group ml-2 mr-2">
                 {% csrf_token %}
-                <table>{{ form.as_table }}</table>
+                <table>{{ form.as_table }}</table><br>
                 <input type="submit" class="btn btn-primary" value="Submit Request">
                 </div>
             </form>
+        </div>
+        {% comment %} Submission guide image {% endcomment %}
+        <div class="col-md-3 ml-2 mr-2 d-flex flex-column align-items-center">
+            <div class="collapse panel card card-body p-2" id="user_guide">
+                <img src="{% static "img/issue-submission.png" %}">
+            </div>
         </div>
     </div>
 </div>
