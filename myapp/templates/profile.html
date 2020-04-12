@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load static %}
+
+<h1>{{ user_name }}</h1>
+<h2>Email: {{ email }}</h2>
+{% if is_technician %}
+<h2>Bio:</h2>
+<p>{{ bio }}</p>
+{% else %}
+<a class="btn btn-primary" href="/profile/become_technician">Sign Up to be a Technician!</a>
+{% endif %}
+
+{% endblock %}

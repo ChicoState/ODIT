@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Q #allows complex query lookups
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.core.exceptions import ObjectDoesNotExist
 
 from . import models
 from . import forms
@@ -22,7 +23,7 @@ def submit(request):
 	if request.method == "POST":
 		form = forms.IssueForm(request.POST)
 		if form.is_valid():
-			form.save()
+			form.save(request.user) #pass in user for foreign key relationship
 			form = forms.IssueForm()
 	else:
 		form = forms.IssueForm()
@@ -61,8 +62,20 @@ def viewissues(request):
 		"title":"ODIT - View Requests",
 		"issues_list":issues_list,
 		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
 	}
 	return render(request, "viewissues.html", context=context)
+
+@login_required
+def self_assign(request,issue_id):
+	if models.Profile.objects.get(user__exact=request.user).user_type: #confirm that user is a technician
+		try:
+			this_issue = models.Issue_Model.objects.get(id__exact=issue_id)
+			this_issue.assigned_user = request.user
+			this_issue.save()
+		except ObjectDoesNotExist:
+			pass
+	return redirect("/viewissues.html")
 
 def about(request):
 	context = {
@@ -88,3 +101,25 @@ def register(request):
 def logoff(request):
 	logout(request)
 	return redirect("/login")
+
+@login_required
+def profile_page(request):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	context = {
+		"title": "ODIT - {}".format(request.user.username),
+		"user_name": request.user.username,
+		"bio": this_user.bio,
+		"email": request.user.email,
+		"is_technician": this_user.user_type,
+    }
+	return render(request, "profile.html", context=context)
+
+@login_required
+def become_technician(request):
+	try:
+		this_user = models.Profile.objects.get(user__exact=request.user)
+		this_user.user_type = True
+		this_user.save()
+	except ObjectDoesNotExist:
+		pass
+	return redirect("/profile.html")
