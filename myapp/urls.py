@@ -24,7 +24,10 @@ urlpatterns = [
     path('index.html', views.index),
     path('submit.html', views.submit),
     path('viewissues.html', views.viewissues),
+	path('viewissues/assign/<int:issue_id>', views.self_assign),
     path('aboutodit.html', views.about),
+	path('profile.html',views.profile_page),
+	path('profile/become_technician',views.become_technician),
     path('login/', auth_views.LoginView.as_view()),
     path('register/', views.register),
     path('logout/', views.logoff)

@@ -33,7 +33,8 @@
             <li>Assigned_user: {{ i.assigned_user }}</li>
             <li>Affected_user: {{ i.affected_user }}</li>
             <li>Is_solved?: {{ i.is_solved }}</li><br>
-            {% endfor %}  
+			{% if is_technician and user != i.assigned_user and user != i.affected_user %}<li><a class="btn btn-secondary" href="/viewissues/assign/{{i.id}}">Assign Myself</a></li>{% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
