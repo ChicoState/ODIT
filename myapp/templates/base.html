@@ -20,7 +20,7 @@
 			</ul>
 			<ul class="nav navbar-nav ml-auto">
 				{% if user.is_authenticated %}
-					<li class="nav-item"><span class="nav-link">Welcome back, {{ user }}!</span></li>
+					<li class="nav-item"><a class="nav-link" href="/profile.html">Welcome back, {{ user }}!</a></li>
 					<li class="nav-item"><a class="nav-link" href="/logout">🔓<span></span>Log Out</a></li>
 				{% else %}
 					<li class="nav-item"><a class="nav-link" href="/register"><span>👤</span>Sign Up</a></li>
