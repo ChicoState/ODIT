@@ -105,12 +105,27 @@ def logoff(request):
 @login_required
 def profile_page(request):
 	this_user = models.Profile.objects.get(user__exact=request.user)
+	
+	# Get all issues for this user, whether they are a technician or not.
+	# Technicians need help sometimes too, you know!
+	if (models.Issue_Model.objects.filter(affected_user=request.user).count() > 0):
+		issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
+	else:
+		issues_list = None
+	# And if they're a technician, they'll likely want to see what they've been assigned.
+	if ( (this_user.user_type == True) and (models.Issue_Model.objects.filter(assigned_user=request.user).count() > 0) ):
+		assigned_issues = models.Issue_Model.objects.filter(assigned_user=request.user)
+	else:
+		# User has no assigned issues. We'll set this variable as None.
+		assigned_issues = None
 	context = {
 		"title": "ODIT - {}".format(request.user.username),
 		"user_name": request.user.username,
 		"bio": this_user.bio,
 		"email": request.user.email,
 		"is_technician": this_user.user_type,
+		"issues_list": issues_list,
+		"assigned_issues": assigned_issues
     }
 	return render(request, "profile.html", context=context)
 
