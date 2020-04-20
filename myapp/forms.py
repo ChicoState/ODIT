@@ -98,7 +98,7 @@ class IssueFilter(forms.Form):
 	keyword = forms.CharField(
 		widget = forms.TextInput(
 			attrs={
-				'class': 'form-control font-weight-normal',
+				'class': 'form-control',
 				'id': 'keyword'
 			}
 		),
@@ -110,7 +110,7 @@ class IssueFilter(forms.Form):
 	issue_type = forms.IntegerField(
 		widget = forms.TextInput(
 			attrs={
-				'class': 'form-control font-weight-normal',
+				'class': 'form-control',
 				'id': 'issue_type'
 			}
 		),
@@ -119,20 +119,30 @@ class IssueFilter(forms.Form):
 	)
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(
-        label="Email",
-        required=True,
+	email = forms.EmailField(
+		label="Email",
+		required=True,
 		validators=[must_be_unique]
-    )
+	)
 
-    class Meta:
-        model = User
-        fields = ("username", "email",
-                  "password1", "password2")
+	class Meta:
+		model = User
+		fields = (
+			"username",
+			"email",
+			"password1",
+			"password2"
+		)
 
-    def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
-        return user
+	def __init__(self, *args, **kwargs):
+		super(RegistrationForm, self).__init__(*args, **kwargs)
+		for field in self.fields:
+			self.fields[field].widget.attrs.update({'class' : 'form-control'})
+		self.fields['password1'].widget.attrs.update({'onfocus' : 'display_requirements()'})
+
+	def save(self, commit=True):
+		user = super(RegistrationForm, self).save(commit=False)
+		user.email = self.cleaned_data["email"]
+		if commit:
+			user.save()
+		return user

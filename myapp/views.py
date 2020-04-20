@@ -43,9 +43,9 @@ def viewissues(request):
 			if (form.cleaned_data['keyword']):
 				issues_list = issues_list.filter(
 					Q(title__contains=form.cleaned_data['keyword']) |
-					Q(description__contains=form.cleaned_data['keyword']) |
-					Q(assigned_user__contains=form.cleaned_data['keyword']) |
-					Q(affected_user__contains=form.cleaned_data['keyword'])
+					Q(description__contains=form.cleaned_data['keyword']) #|
+					#Q(assigned_user__contains=form.cleaned_data['keyword']) |
+					#Q(affected_user__contains=form.cleaned_data['keyword'])
 				)
 			if (form.cleaned_data['issue_type']):
 				issues_list = issues_list.filter(
