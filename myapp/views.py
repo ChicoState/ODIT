@@ -15,6 +15,10 @@ def index(request, page=0):
 		"how":"How it works: ",
 		"desc":"Send in a request --> A registered ODITer who has the skills needed receives the request --> They help out. ",
 	}
+	try:
+		context["is_technician"] = models.Profile.objects.get(user__exact=request.user).user_type
+	except: # user is not logged in
+		pass
    
 	return render(request, "index.html", context=context)
 
@@ -30,7 +34,8 @@ def submit(request):
 
 	context = {
 		"title":"ODIT - Submit Request",
-		"form":form
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
 	}
 	return render(request, "submit.html", context=context)
 
@@ -43,9 +48,9 @@ def viewissues(request):
 			if (form.cleaned_data['keyword']):
 				issues_list = issues_list.filter(
 					Q(title__contains=form.cleaned_data['keyword']) |
-					Q(description__contains=form.cleaned_data['keyword']) #|
-					#Q(assigned_user__contains=form.cleaned_data['keyword']) |
-					#Q(affected_user__contains=form.cleaned_data['keyword'])
+					Q(description__contains=form.cleaned_data['keyword']) |
+					Q(assigned_user__username__contains=form.cleaned_data['keyword']) |
+					Q(affected_user__username__contains=form.cleaned_data['keyword'])
 				)
 			if (form.cleaned_data['issue_type']):
 				issues_list = issues_list.filter(
@@ -67,6 +72,36 @@ def viewissues(request):
 	return render(request, "viewissues.html", context=context)
 
 @login_required
+def viewmyissues(request):
+	issues_list = models.Issue_Model.objects.filter(assigned_user=request.user)
+	if request.method == "POST":
+		form = forms.IssueFilter(request.POST)
+		if form.is_valid():
+			
+			if (form.cleaned_data['keyword']):
+				issues_list = issues_list.filter(
+					Q(title__contains=form.cleaned_data['keyword']) |
+					Q(description__contains=form.cleaned_data['keyword']) |
+					Q(affected_user__username__contains=form.cleaned_data['keyword'])
+				)
+			if (form.cleaned_data['issue_type']):
+				issues_list = issues_list.filter(
+					Q(issue_type__exact=form.cleaned_data['issue_type'])
+				)
+		else:
+			form = forms.IssueFilter()
+	else:
+		form = forms.IssueFilter()
+
+	context = {
+		"title":"ODIT - View Requests",
+		"issues_list":issues_list,
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+	}
+	return render(request, "viewmyissues.html", context=context)
+
+@login_required
 def self_assign(request,issue_id):
 	if models.Profile.objects.get(user__exact=request.user).user_type: #confirm that user is a technician
 		try:
@@ -81,6 +116,11 @@ def about(request):
 	context = {
 		"title":"ODIT - About",
 	}
+	try:
+		context["is_technician"] = models.Profile.objects.get(user__exact=request.user).user_type
+	except: # user is not logged in
+		pass
+	
 	return render(request, "aboutodit.html", context=context)
 
 def register(request):
