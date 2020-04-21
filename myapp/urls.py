@@ -28,7 +28,10 @@ urlpatterns = [
 	path('viewissues/assign/<int:issue_id>', views.self_assign),
     path('aboutodit.html', views.about),
 	path('profile.html',views.profile_page),
+	path('profile/edit.html',views.edit_profile),
 	path('profile/become_technician',views.become_technician),
+	path('viewtechnicians.html',views.view_technicians),
+	path('viewprofile/<int:user_id>',views.view_profile),
     path('login/', auth_views.LoginView.as_view()),
     path('register/', views.register),
     path('logout/', views.logoff)

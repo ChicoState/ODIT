@@ -124,19 +124,19 @@ def about(request):
 	return render(request, "aboutodit.html", context=context)
 
 def register(request):
-    if request.method == "POST":
-        form_instance = forms.RegistrationForm(request.POST)
-        if form_instance.is_valid():
-            form_instance.save()
-            return redirect("/login/")
+	if request.method == "POST":
+		form_instance = forms.RegistrationForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save()
+			return redirect("/login/")
 
-    else:
-        form_instance = forms.RegistrationForm()
-    context = {
+	else:
+		form_instance = forms.RegistrationForm()
+	context = {
 		"title":"ODIT - Register",
-        "form":form_instance,
-    }
-    return render(request, "registration/register.html", context=context)
+		"form":form_instance,
+	}
+	return render(request, "registration/register.html", context=context)
 
 def logoff(request):
 	logout(request)
@@ -151,8 +151,28 @@ def profile_page(request):
 		"bio": this_user.bio,
 		"email": request.user.email,
 		"is_technician": this_user.user_type,
-    }
+	}
 	return render(request, "profile.html", context=context)
+
+@login_required
+def edit_profile(request):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	if request.method == "POST":
+		form_instance = forms.ProfileForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(request.user.id)
+			return redirect("/profile.html")
+	else:
+		if this_user.user_type:
+			form_instance = forms.ProfileForm(initial={'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
+		else:
+			form_instance = forms.ProfileFormNontech(initial={'email':request.user.email,'user_name':request.user.username})
+	context = {
+		"title": "ODIT - Edit Profile".format(request.user.username),
+		"form": form_instance,
+		"is_technician": this_user.user_type,
+	}
+	return render(request, "editprofile.html", context=context)
 
 @login_required
 def become_technician(request):
@@ -163,3 +183,47 @@ def become_technician(request):
 	except ObjectDoesNotExist:
 		pass
 	return redirect("/profile.html")
+
+@login_required
+def view_technicians(request):
+	if request.method == "POST":
+		form = forms.ProfileFilter(request.POST)
+		if form.is_valid():
+			profile_list = models.Profile.objects.filter(user_type=True)
+			if (form.cleaned_data['keyword']):
+				profile_list = profile_list.filter(
+					Q(bio__contains=form.cleaned_data['keyword']) |
+					Q(user__username__contains=form.cleaned_data['keyword'])
+				)
+			if (form.cleaned_data['name']):
+				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['user_name'])
+		else:
+			form = forms.ProfileFilter()
+			profile_list = models.Profile.objects.filter(user_type=True)
+	else:
+		form = forms.ProfileFilter()
+		profile_list = models.Profile.objects.filter(user_type=True)
+
+	context = {
+		"title":"ODIT - View Requests",
+		"profile_list":profile_list,
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+	}
+	return render(request, "viewtechnicians.html", context=context)
+
+@login_required
+def view_profile(request,user_id):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	try:
+		view_user = models.Profile.objects.get(user__id__exact=user_id)
+	except ObjectDoesNotExist:
+		return redirect("/viewtechnicians.html")
+	context = {
+		"title": "ODIT - {}".format(view_user.user.username),
+		"user_name": view_user.user.username,
+		"bio": view_user.bio,
+		"email": view_user.user.email,
+		"is_technician": this_user.user_type,
+	}
+	return render(request, "viewprofile.html", context=context)
