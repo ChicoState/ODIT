@@ -124,19 +124,19 @@ def about(request):
 	return render(request, "aboutodit.html", context=context)
 
 def register(request):
-    if request.method == "POST":
-        form_instance = forms.RegistrationForm(request.POST)
-        if form_instance.is_valid():
-            form_instance.save()
-            return redirect("/login/")
+	if request.method == "POST":
+		form_instance = forms.RegistrationForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save()
+			return redirect("/login/")
 
-    else:
-        form_instance = forms.RegistrationForm()
-    context = {
+	else:
+		form_instance = forms.RegistrationForm()
+	context = {
 		"title":"ODIT - Register",
-        "form":form_instance,
-    }
-    return render(request, "registration/register.html", context=context)
+		"form":form_instance,
+	}
+	return render(request, "registration/register.html", context=context)
 
 def logoff(request):
 	logout(request)
@@ -145,29 +145,34 @@ def logoff(request):
 @login_required
 def profile_page(request):
 	this_user = models.Profile.objects.get(user__exact=request.user)
-	
-	# Get all issues for this user, whether they are a technician or not.
-	# Technicians need help sometimes too, you know!
-	if (models.Issue_Model.objects.filter(affected_user=request.user).count() > 0):
-		issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
-	else:
-		issues_list = None
-	# And if they're a technician, they'll likely want to see what they've been assigned.
-	if ( (this_user.user_type == True) and (models.Issue_Model.objects.filter(assigned_user=request.user).count() > 0) ):
-		assigned_issues = models.Issue_Model.objects.filter(assigned_user=request.user)
-	else:
-		# User has no assigned issues. We'll set this variable as None.
-		assigned_issues = None
 	context = {
 		"title": "ODIT - {}".format(request.user.username),
 		"user_name": request.user.username,
 		"bio": this_user.bio,
 		"email": request.user.email,
 		"is_technician": this_user.user_type,
-		"issues_list": issues_list,
-		"assigned_issues": assigned_issues
-    }
+	}
 	return render(request, "profile.html", context=context)
+
+@login_required
+def edit_profile(request):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	if request.method == "POST":
+		form_instance = forms.ProfileForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(request.user.id)
+			return redirect("/profile.html")
+	else:
+		if this_user.user_type:
+			form_instance = forms.ProfileForm(initial={'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
+		else:
+			form_instance = forms.ProfileFormNontech(initial={'email':request.user.email,'user_name':request.user.username})
+	context = {
+		"title": "ODIT - Edit Profile".format(request.user.username),
+		"form": form_instance,
+		"is_technician": this_user.user_type,
+	}
+	return render(request, "editprofile.html", context=context)
 
 @login_required
 def become_technician(request):
@@ -178,3 +183,66 @@ def become_technician(request):
 	except ObjectDoesNotExist:
 		pass
 	return redirect("/profile.html")
+
+@login_required
+def view_technicians(request):
+	if request.method == "POST":
+		form = forms.ProfileFilter(request.POST)
+		if form.is_valid():
+			profile_list = models.Profile.objects.filter(user_type=True)
+			if (form.cleaned_data['keyword']):
+				profile_list = profile_list.filter(
+					Q(bio__contains=form.cleaned_data['keyword']) |
+					Q(user__username__contains=form.cleaned_data['keyword'])
+				)
+			if (form.cleaned_data['name']):
+				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['user_name'])
+		else:
+			form = forms.ProfileFilter()
+			profile_list = models.Profile.objects.filter(user_type=True)
+	else:
+		form = forms.ProfileFilter()
+		profile_list = models.Profile.objects.filter(user_type=True)
+
+	context = {
+		"title":"ODIT - View Requests",
+		"profile_list":profile_list,
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+	}
+	return render(request, "viewtechnicians.html", context=context)
+
+@login_required
+def view_profile(request,user_id):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	try:
+		view_user = models.Profile.objects.get(user__id__exact=user_id)
+	except ObjectDoesNotExist:
+		return redirect("/viewtechnicians.html")
+	context = {
+		"title": "ODIT - {}".format(view_user.user.username),
+		"user_name": view_user.user.username,
+		"bio": view_user.bio,
+		"email": view_user.user.email,
+		"is_technician": this_user.user_type,
+	}
+	return render(request, "viewprofile.html", context=context)
+
+
+@login_required
+def viewmysubmittedissues(request):
+	# Get all issues that this user has submitted
+	filter = models.Issue_Model.objects.filter(affected_user=request.user)
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	if (filter.count() <= 0):
+		# User has no submitted issues
+		issues_list = None
+	else:
+		issues_list = filter
+
+	context = {
+		"title": "ODIT - Your Submitted Requests",
+		"my_issues": issues_list,
+		"is_technician": this_user.user_type
+	}
+	return render(request, "viewmysubmittedissues.html", context)

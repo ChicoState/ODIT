@@ -13,13 +13,14 @@
             </div>
             <div class="col col-sm justify-content-center">
                 <input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
-                <button class="btn btn-secondary btn-outline-light" onclick="clear()">Clear</button>
-                <script>
+                {% comment %} <button class="btn btn-secondary btn-outline-light" onclick="clear()">Clear</button> {% endcomment %}
+                <button class="btn btn-secondary btn-outline-light">Clear</button>
+                {% comment %} <script>
                 function clear(){
                     $("#keyword").val("");
                     $("#issue_type").val("");
                 }
-                </script>
+                </script> {% endcomment %}
             </div>
         </div>
     </form>

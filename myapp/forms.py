@@ -146,3 +146,87 @@ class RegistrationForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+class ProfileForm(forms.Form):
+	user_name = forms.CharField(
+		widget = forms.TextInput(
+			attrs={'class': 'form-control'}
+		),
+		label='User Name',
+		required=False,
+		max_length=150
+	)
+	
+	email = forms.EmailField(
+		label="Email",
+		required=False
+	)
+
+	bio = forms.CharField(
+		widget=forms.Textarea(
+			attrs={'class': 'form-control'}
+		),
+		label='Bio',
+		required=False,
+		max_length=720
+	)
+
+	def save(self,id):
+		this_user = User.objects.get(id__exact=id)
+		if self.cleaned_data["email"] and self.cleaned_data["email"] != this_user.email:
+			this_user.email = self.cleaned_data["email"]
+		if self.cleaned_data['user_name']:
+			this_user.username = self.cleaned_data["user_name"]
+		if self.cleaned_data['bio']:
+			this_user.profile.bio = self.cleaned_data["bio"]
+		this_user.save()
+		return this_user
+
+class ProfileFormNontech(forms.Form):
+	user_name = forms.CharField(
+		widget = forms.TextInput(
+			attrs={'class': 'form-control'}
+		),
+		label='User Name',
+		required=False,
+		max_length=150
+	)
+	
+	email = forms.EmailField(
+		label="Email",
+		required=False
+	)
+
+	def save(self,id):
+		this_user = User.objects.get(id__exact=id)
+		if self.cleaned_data["email"] and self.cleaned_data["email"] != this_user.email:
+			this_user.email = self.cleaned_data["email"]
+		if self.cleaned_data['user_name']:
+			this_user.username = self.cleaned_data["user_name"]
+		this_user.save()
+		return this_user
+
+class ProfileFilter(forms.Form):
+	keyword = forms.CharField(
+		widget = forms.TextInput(
+			attrs={
+				'class': 'form-control font-weight-normal',
+				'id': 'keyword'
+			}
+		),
+		label='Filter by Keyword',
+		required=False,
+		max_length=100
+	)
+
+	name = forms.CharField(
+		widget = forms.TextInput(
+			attrs={
+				'class': 'form-control font-weight-normal',
+				'id': 'issue_type'
+			}
+		),
+		label='Filter by Name',
+		required=False,
+		max_length=100
+	)
