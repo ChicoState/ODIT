@@ -14,6 +14,8 @@
 			<ul class="nav navbar-nav">
 				{% if user.is_authenticated %}
 					<li class="nav-item"><a class="nav-link" href="/submit.html">Submit Request</a></li>
+					<li class="nav-item"><a class="nav-link" href="/viewmysubmittedissues.html">View my Submitted Requests</a></li>
+					<li class="nav-item"><a class="nav-link" href="/viewtechnicians.html">Find a Technician</a></li>
 					{% if is_technician %}
 						<li class="nav-item"><a class="nav-link" href="/viewissues.html">View Requests</a></li>
 						<li class="nav-item"><a class="nav-link" href="/viewmyissues.html">View Assignments</a></li>

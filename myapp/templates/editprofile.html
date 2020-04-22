@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-1 mx-auto d-flex flex-column align-items-center"></div>
+        <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+            
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group ml-2 mr-2">
+                {% csrf_token %}
+                <table>{{ form.as_table }}</table><br>
+                <input type="submit" class="btn btn-primary" value="Confirm Changes">
+				<a href="/profile.html" class="btn-btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

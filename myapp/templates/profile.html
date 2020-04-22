@@ -7,8 +7,8 @@
 	{% comment %} User profile
 
 	We might choose, at some point, to let users view each other's profiles.
-	In this case, an additional boolean should be added that determines whether the page should also
-	load the content past this initial chunk (user's own issues, assigned issues, etc.)
+	In this case, an additional boolean should be added that determines whether the page can be edited by the user
+	viewing the page.
 	{% endcomment %}
 	<div class="row">
 		<div class="col">
@@ -22,58 +22,5 @@
 			{% endif %}
 		</div>
 	</div>
-	{% comment %} User's own issues {% endcomment %}
-	<div class="row">
-		<div class="col">
-			<div class="card bg-secondary mb-2">
-				<div class="card-header">Issues you have submitted:</div>
-				<div class="card-body">
-				{% if issues_list is not None %}
-					{% comment %} TODO: Add a filter form to this list, too {% endcomment %}
-					{% for issue in issues_list %}
-					<div class="card bg-light">
-						<div class="card-header">{{ issue.title|title }}</div>
-						<div class="card-body px-1 py-1">
-							<div class="border border-secondary rounded px-2 py-2">
-								<p>{{ issue.description }}</p>
-							</div>
-							<p>Date Created: {{ issue.date_created }}</p>
-							<p>Issue type: {{ issue.issue_type }}</p>
-						</div>
-					</div>
-					{% endfor %}
-				{% else %}
-				<p>None found! We hope you continue to have zero problems with your technology. Feel free to <a href="/submit.html">submit an issue</a> a problem does pop up.</p>
-				{% endif %}
-				</div>
-			</div>
-		</div>
-	</div>
-	{% comment %} User's (self) assigned issues
-
-	Only displays if is_technician is true	
-	{% endcomment %}
-	{% if is_technician == True %}
-	<div class="row">
-		<div class="col">
-			<div class="card bg-secondary px-2 py-2">
-			{% if assigned_issues is not None %}
-			<h4>Your pending issues:</h4>
-			{% for issue in assigned_issues %}
-			<ul>
-				<li>Title: {{ issue.title }}</li>
-				<li>Description: {{ issue.description }}</li>
-				<li>Date Created: {{ issue.date_created }}</li>
-				<li>Issue type: {{ issue.issue_type }}</li>
-				<li>Affected user: {{ issue.affected_user }}</li>
-			</ul>
-			{% endfor %}
-			{% else %}
-			<p>You have no pending issues to resolve. Maybe <a href="/viewissues.html">find someone you can help out?</a></p>
-			{% endif %}
-			</div>
-		</div>
-	</div>
-	{% endif %}
 </div>
 {% endblock %}
