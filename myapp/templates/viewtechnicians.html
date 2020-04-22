@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mb-2 card bg-secondary">
+    <h3 class="card bg-primary font-weight-bold">Search for users</h3>
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="form-group">
+                {% csrf_token %}
+                <table>{{ form.as_table }}</table>
+                </div>
+            </div>
+            <div class="col col-sm justify-content-center">
+                <input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
+                <a class="btn btn-secondary btn-outline-light" href="/viewtechnicians.html">Clear</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if profile_list %}
+
+<div class="container">
+    <div class="row">
+        <div class="column ml-2 mr-2">
+            {% for i in profile_list %}
+            <li>Name: {{ i.user.username }}</li>
+			<li>Bio: {{ i.bio }}</li>
+			<li><a class="btn btn-secondary" href="/viewprofile/{{i.id}}">View Profile</a></li>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% else %}
+<p>There are no technicians with those parameters.</p>
+{% endif %}
+
+{% endblock %}
