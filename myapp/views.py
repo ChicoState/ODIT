@@ -77,7 +77,6 @@ def viewmyissues(request):
 	if request.method == "POST":
 		form = forms.IssueFilter(request.POST)
 		if form.is_valid():
-			
 			if (form.cleaned_data['keyword']):
 				issues_list = issues_list.filter(
 					Q(title__contains=form.cleaned_data['keyword']) |
@@ -228,21 +227,31 @@ def view_profile(request,user_id):
 	}
 	return render(request, "viewprofile.html", context=context)
 
-
 @login_required
 def viewmysubmittedissues(request):
-	# Get all issues that this user has submitted
-	filter = models.Issue_Model.objects.filter(affected_user=request.user)
-	this_user = models.Profile.objects.get(user__exact=request.user)
-	if (filter.count() <= 0):
-		# User has no submitted issues
-		issues_list = None
-	else:
-		issues_list = filter
+    issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
+    if request.method == "POST":
+        form = forms.IssueFilter(request.POST)
+        if form.is_valid(): 
+            if (form.cleaned_data['keyword']):
+                issues_list = issues_list.filter(
+                    Q(title__contains=form.cleaned_data['keyword']) |
+                    Q(description__contains=form.cleaned_data['keyword']) |
+                    Q(affected_user__username__contains=form.cleaned_data['keyword'])
+                )
+            if (form.cleaned_data['issue_type']):
+                issues_list = issues_list.filter(
+                    Q(issue_type__exact=form.cleaned_data['issue_type'])
+                )
+        else:
+            form = forms.IssueFilter()
+    else:
+        form = forms.IssueFilter()
 
-	context = {
-		"title": "ODIT - Your Submitted Requests",
-		"my_issues": issues_list,
-		"is_technician": this_user.user_type
-	}
-	return render(request, "viewmysubmittedissues.html", context)
+    context = {
+        "title":"ODIT - Your Submitted Issues",
+        "issues_list":issues_list,
+        "form":form,
+        "is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+    }
+    return render(request, "viewmysubmittedissues.html", context=context)
