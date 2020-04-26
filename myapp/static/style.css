@@ -1,8 +1,11 @@
-.card {
-  color: #f1f1f1;
+a {
+  color: #aac4ff;
 }
 
 @media (prefers-color-scheme: light) {
+  .card {
+    color: #f1f1f1;
+  }
   .navbar {
     background-color: gray;
   }
@@ -26,6 +29,23 @@
 }
 @media (prefers-color-scheme: dark) {
   /* Like regular styles.css, but dark mode */
+  .card {
+    color: #FFFFFF;
+  }
+  .card.bg-light{
+    color: #3c3c3c;
+  }
+  .card.bg-light > .card-header {
+    color: #3c3c3c;
+    background-color: #dfdfdf;
+  }
+  .card.bg-light > .card-body {
+    color: #3c3c3c;
+    background-color: #c2c2c2;
+  }
+  .card.bg-light > *{
+    color: #3c3c3c;
+  }
   body {
     color: #c4c4c4;
     background: #414141;

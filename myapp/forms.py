@@ -98,7 +98,7 @@ class IssueFilter(forms.Form):
 	keyword = forms.CharField(
 		widget = forms.TextInput(
 			attrs={
-				'class': 'form-control font-weight-normal',
+				'class': 'form-control',
 				'id': 'keyword'
 			}
 		),
@@ -110,7 +110,7 @@ class IssueFilter(forms.Form):
 	issue_type = forms.IntegerField(
 		widget = forms.TextInput(
 			attrs={
-				'class': 'form-control font-weight-normal',
+				'class': 'form-control',
 				'id': 'issue_type'
 			}
 		),
@@ -127,8 +127,18 @@ class RegistrationForm(UserCreationForm):
 
 	class Meta:
 		model = User
-		fields = ("username", "email",
-				  "password1", "password2")
+		fields = (
+			"username",
+			"email",
+			"password1",
+			"password2"
+		)
+
+	def __init__(self, *args, **kwargs):
+		super(RegistrationForm, self).__init__(*args, **kwargs)
+		for field in self.fields:
+			self.fields[field].widget.attrs.update({'class' : 'form-control'})
+		self.fields['password1'].widget.attrs.update({'onfocus' : 'display_requirements()'})
 
 	def save(self, commit=True):
 		user = super(RegistrationForm, self).save(commit=False)

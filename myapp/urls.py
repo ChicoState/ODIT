@@ -25,6 +25,7 @@ urlpatterns = [
     path('submit.html', views.submit),
     path('viewissues.html', views.viewissues),
 	path('viewmyissues.html', views.viewmyissues),
+    path('viewmysubmittedissues.html', views.viewmysubmittedissues),
 	path('viewissues/assign/<int:issue_id>', views.self_assign),
     path('aboutodit.html', views.about),
 	path('profile.html',views.profile_page),
