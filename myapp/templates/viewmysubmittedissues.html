@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+	{% comment %} User's own issues {% endcomment %}
+	<div class="card card-body bg-secondary mb-2">
+		<form method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col col-md-4">
+					<div class="form-group">
+						{% csrf_token %}
+						<table>{{ form.as_table }}</table>
+					</div>
+				</div>
+				<div class="col col-sm justify-content-center">
+					<input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
+					<a class="btn btn-secondary btn-outline-light" href="/viewmysubmittedissues.html">Clear</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col ml-2 mr-2">
+			<div class="card bg-secondary mb-2">
+				<div class="card-header">Issues you have submitted:</div>
+				<div class="card-body">
+				{% if issues_list.count > 0 %}
+					{% comment %} TODO: Add a filter form to this list, too {% endcomment %}
+					{% for issue in issues_list %}
+					<div class="card bg-light">
+						<div class="card-header">{{ issue.title|title }}</div>
+						<div class="card-body px-1 py-1">
+							<div class="border border-secondary rounded px-2 py-2">
+								<p>{{ issue.description }}</p>
+							</div>
+							<p>Date Created: {{ issue.date_created }}</p>
+							<p>Issue type: {{ issue.issue_type }}</p>
+						</div>
+					</div>
+					{% endfor %}
+				{% else %}
+				<p>Nothing found! {% comment %} We hope you continue to have zero problems with your technology. Feel free to <a href="/submit.html">submit a request</a> when a problem does pop up.{% endcomment %}</p> 
+				{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
