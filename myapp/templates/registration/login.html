@@ -7,7 +7,8 @@
 <div class="row justify-content-center align-items-center">
     <div class="d-flex flex-column align-items-center">
         <div class="col align-items-left">
-            <h3 class="text-center">Login</h3>
+            <div class="card card-body bg-secondary">
+            <h3 class="text-center">Log in</h3>
             <form action="/login/" method="post" class="text-center">
                 {% csrf_token %}
                 
@@ -24,6 +25,7 @@
                 <input type="submit" class="btn btn-primary" value="Login" />
                 <input type="hidden" name="next" value="{{ request.GET.next }}" />
             </form>
+            </div>
         </div>
     </div>
 </div>

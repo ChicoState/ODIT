@@ -3,14 +3,24 @@
 
 {% load static %}
 
-<h1>{{ user_name }}</h1>
-<h2>Email: {{ email }}</h2>
-{% if is_technician %}
-<h2>Bio:</h2>
-<p>{{ bio }}</p>
-{% else %}
-<a class="btn btn-primary" href="/profile/become_technician">Sign Up to be a Technician!</a>
-{% endif %}
-<a class="btn btn-primary" href="/profile/edit.html">Edit Profile</a>
+<div class="container">
+	{% comment %} User profile
 
+	We might choose, at some point, to let users view each other's profiles.
+	In this case, an additional boolean should be added that determines whether the page can be edited by the user
+	viewing the page.
+	{% endcomment %}
+	<div class="row">
+		<div class="col">
+			<h1>{{ user_name }}</h1>
+			<h2>Email: {{ email }}</h2>
+			{% if is_technician %}
+			<h2>Bio:</h2>
+			<p>{{ bio }}</p>
+			{% else %}
+			<a class="btn btn-primary my-2" href="/profile/become_technician">Sign Up to be a Technician!</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
 {% endblock %}
