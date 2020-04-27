@@ -4,22 +4,67 @@
 
 <!-- FIX: Let's make this look more appealing -->
 <div class="container">
-    <form action="/register/" method="post" class="text-center">
-        <div class="panel panel-default text-center">
-            <h3>Sign Up Today!</h3>
-            {% csrf_token %}
-                {% for field in form %}
-                    <p>
-                        {{ field.label_tag}}
-                        {{ field }}
-                        {% for error in field.errors %}
-                            <p style="color: red">{{ error }}</p>
+    <div class="row">
+    <div class="col">
+        <form action="/register/" method="post" class="text-center">
+            <div class="card card-body mx-auto bg-secondary">
+                <h3>Sign Up Today!</h3>
+                {% csrf_token %}
+                <div class="row mb-2">
+                    <div class="col-sm">
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <table class="">
+                        {% for field in form %}
+                            <tr>
+                            <td class="text-right pr-2">
+                                {{ field.label_tag}}
+                            </td>
+                            <td>
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                            </td>
+                            </tr>
                         {% endfor %}
-                    </p>
-                {% endfor %}
-            <input type="submit" class="btn btn-primary" value="Register" />
-        </div>
-    </form>
+                        </table>
+                    </div>
+                    <div class="col-sm mx-0">
+                        <div class="card py-2 px-4 bg-light text-left collapse" id="requirements">
+                        Your password must satisfy the following requirements:
+                        <ul>
+                            <li>
+                            Requirement
+                            </li>
+                            <li>
+                            Requirement
+                            </li>
+                            <li>
+                            Requirement
+                            </li>
+                            <li>
+                            Requirement
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary mx-auto" value="Register"/>
+            </div>
+        </form>
+    </div>
+    </div>
 </div>
+
+<script>
+let open = false;
+function display_requirements(){
+    if (!open){
+        $('#requirements').collapse()
+    }
+}
+
+</script>
 
 {% endblock %}

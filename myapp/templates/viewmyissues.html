@@ -19,26 +19,33 @@
     </form>
 </div>
 
-{% if issues_list %}
-
 <div class="container">
     <div class="row">
-        <div class="column ml-2 mr-2">
+        <div class="col ml-2 mr-2">
+        {% if issues_list %}
             {% for i in issues_list %}
-            <h4><p><b>Ticket # {{ i.id }}</b></p></h4>
-            <li>Title: {{ i.title }}</li>
-            <li>Description: {{ i.description }}</li>
-            <li>Date Created: {{ i.date_created }}</li>
-            <li>Issue_type: {{ i.issue_type }}</li>
-            <li>Assigned_user: {{ i.assigned_user }}</li>
-            <li>Affected_user: {{ i.affected_user }}</li>
-            <li>Is_solved?: {{ i.is_solved }}</li><br>
+            <div class="card bg-light my-2">
+                <div class="card-header">
+                    Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
+                </div>
+                <div class="card-body">
+                <p>Description: {{ i.description }}</p>
+                <p>Date created: {{ i.date_created }}</p>
+                <p>Issue type: {{ i.issue_type }}</p>
+                <p>Assigned user: {{ i.assigned_user }}</p>
+                <p>Affected user: {{ i.affected_user }}</p>
+                <p>Issue solved?: {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
+                {% if i.is_solved == False %}
+                    <a class="btn btn-secondary" href="/viewmyissues/resolve/{{i.id}}">Resolve?</a>
+                {% endif %}
+                </div>
+            </div>
             {% endfor %}
+        {% else %}
+            <p>There are no entries with those parameters.</p>
+        {% endif %}
         </div>
     </div>
 </div>
-{% else %}
-<p>You don't have any assigned issued with those parameters.</p>
-{% endif %}
 
 {% endblock %}
