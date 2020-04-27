@@ -194,7 +194,7 @@ def view_technicians(request):
 				profile_list = profile_list.filter(
 					Q(bio__contains=form.cleaned_data['keyword']) |
 					Q(user__username__contains=form.cleaned_data['keyword']) |
-					Q(location__contains=form.cleaned_data['location'])
+					Q(location__contains=form.cleaned_data['keyword'])
 				)
 			if (form.cleaned_data['name']):
 				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['name'])

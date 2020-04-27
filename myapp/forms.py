@@ -6,10 +6,16 @@ from django.core.validators import validate_slug
 from . import models
 
 # validator to ensure email addresses are unique
-def must_be_unique(value):
+def must_be_unique_email(value):
 	user = User.objects.filter(email=value)
 	if len(user) > 0:
 		raise forms.ValidationError("A user with that email already exists.")
+
+# validator to ensure email addresses are unique
+def must_be_unique_user(value):
+	user = User.objects.filter(username=value)
+	if len(user) > 0:
+		raise forms.ValidationError("A user with that username already exists.")
 
 class IssueForm(forms.Form):
 	title = forms.CharField(
@@ -76,7 +82,7 @@ class RegistrationForm(UserCreationForm):
 	email = forms.EmailField(
 		label="Email",
 		required=True,
-		validators=[must_be_unique]
+		validators=[must_be_unique_email]
 	)
 
 	class Meta:
@@ -108,12 +114,14 @@ class ProfileForm(forms.Form):
 		),
 		label='User Name',
 		required=False,
+		validators=[must_be_unique_user],
 		max_length=150
 	)
 	
 	email = forms.EmailField(
 		label="Email",
-		required=False
+		required=False,
+		validators=[must_be_unique_email]
 	)
 
 	bio = forms.CharField(
@@ -154,11 +162,13 @@ class ProfileFormNontech(forms.Form):
 		),
 		label='User Name',
 		required=False,
+		validators=[must_be_unique_user],
 		max_length=150
 	)
 	
 	email = forms.EmailField(
 		label="Email",
+		validators=[must_be_unique_email],
 		required=False
 	)
 

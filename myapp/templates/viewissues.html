@@ -32,7 +32,8 @@
         {% if issues_list %}
             {% for i in issues_list %}
             <div class="card bg-light my-2">
-                <div class="card-header">Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
+                <div class="card-header">
+                    Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
                 </div>
                 <div class="card-body">
                 <p>Description: {{ i.description }}</p>
@@ -42,7 +43,7 @@
                 <p>Affected user: {{ i.affected_user }}</p>
                 <p>Issue solved?: {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
                 {% if is_technician and user != i.assigned_user and user != i.affected_user %}
-                <a class="btn btn-secondary" href="/viewissues/assign/{{i.id}}">Assign Myself</a>
+                    <a class="btn btn-secondary" href="/viewissues/assign/{{i.id}}">Assign Myself</a>
                 {% endif %}
                 </div>
             </div>
