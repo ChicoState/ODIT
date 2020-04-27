@@ -93,7 +93,7 @@ def viewmyissues(request):
 		form = forms.IssueFilter()
 
 	context = {
-		"title":"ODIT - View Requests",
+		"title":"ODIT - View Assignments",
 		"issues_list":issues_list,
 		"form":form,
 		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
@@ -148,6 +148,7 @@ def profile_page(request):
 		"title": "ODIT - {}".format(request.user.username),
 		"user_name": request.user.username,
 		"bio": this_user.bio,
+		"location": this_user.location,
 		"email": request.user.email,
 		"is_technician": this_user.user_type,
 	}
@@ -163,7 +164,7 @@ def edit_profile(request):
 			return redirect("/profile.html")
 	else:
 		if this_user.user_type:
-			form_instance = forms.ProfileForm(initial={'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
+			form_instance = forms.ProfileForm(initial={'location':this_user.location,'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
 		else:
 			form_instance = forms.ProfileFormNontech(initial={'email':request.user.email,'user_name':request.user.username})
 	context = {
@@ -192,10 +193,15 @@ def view_technicians(request):
 			if (form.cleaned_data['keyword']):
 				profile_list = profile_list.filter(
 					Q(bio__contains=form.cleaned_data['keyword']) |
-					Q(user__username__contains=form.cleaned_data['keyword'])
+					Q(user__username__contains=form.cleaned_data['keyword']) |
+					Q(location__contains=form.cleaned_data['keyword'])
 				)
 			if (form.cleaned_data['name']):
-				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['user_name'])
+				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['name'])
+			if (form.cleaned_data['location']):
+				profile_list = profile_list.filter(
+					Q(location__contains=form.cleaned_data['location'])
+				)
 		else:
 			form = forms.ProfileFilter()
 			profile_list = models.Profile.objects.filter(user_type=True)
@@ -222,6 +228,7 @@ def view_profile(request,user_id):
 		"title": "ODIT - {}".format(view_user.user.username),
 		"user_name": view_user.user.username,
 		"bio": view_user.bio,
+		"location": view_user.location,
 		"email": view_user.user.email,
 		"is_technician": this_user.user_type,
 	}

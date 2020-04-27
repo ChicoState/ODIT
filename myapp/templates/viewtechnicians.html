@@ -2,7 +2,8 @@
 {% block content %}
 
 <div class="container mb-2 card bg-secondary">
-    <h3 class="card bg-primary font-weight-bold">Search for users</h3>
+    <h3 class="card bg-primary font-weight-bold">Search for technicians</h3>
+    <p>Searches can be done via username, bio or location.</p>
     <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col col-md-4">
@@ -26,8 +27,10 @@
         <div class="column ml-2 mr-2">
             {% for i in profile_list %}
             <li>Name: {{ i.user.username }}</li>
-			<li>Bio: {{ i.bio }}</li>
-			<li><a class="btn btn-secondary" href="/viewprofile/{{i.id}}">View Profile</a></li>
+            <li>Bio: {{ i.bio }}</li>
+            <li>Location: {{ i.location }}</li>
+            <li><a class="btn btn-secondary" href="/viewprofile/{{i.id}}">View Profile</a></li>
+            <br>
             {% endfor %}
         </div>
     </div>
