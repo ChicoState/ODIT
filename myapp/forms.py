@@ -38,57 +38,11 @@ class IssueForm(forms.Form):
 		required=True
 	)
 
-	"""
-	date_created = forms.CharField(
-		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
-		),
-		label='Date Created',
-		required=True,
-	)
-	"""
-
-	"""
-	assigned_user = forms.CharField(
-		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
-		),
-		label='Assigned User',
-		required=False,
-		max_length=50
-	)
-	"""
-
-	# this field will eventually be removed as the affected user will
-	# be automatically set to the user who is logged in
-	"""
-	affected_user = forms.CharField(
-		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
-		),
-		label='Affected User',
-		required=True,
-		max_length=50,
-	)
-	"""
-	# it's now been removed :D
-
-	"""
-	is_solved = forms.BooleanField(
-		widget = forms.CheckboxInput(
-			attrs={'class':'form-check'}
-		),
-		label='Is this issue solved?'
-	)
-	"""
-
 	def save(self, this_user):
 		issues_instance = models.Issue_Model()
 		issues_instance.title = self.cleaned_data["title"]
 		issues_instance.description = self.cleaned_data["description"]
 		issues_instance.issue_type = self.cleaned_data["issue_type"]
-		#issues_instance.date_created = self.cleaned_data["date_created"]
-		#issues_instance.assigned_user = self.cleaned_data["assigned_user"]
 		issues_instance.affected_user = this_user
 		issues_instance.is_solved = 0
 		issues_instance.save()
@@ -171,6 +125,15 @@ class ProfileForm(forms.Form):
 		max_length=720
 	)
 
+	location = forms.CharField(
+		widget = forms.TextInput(
+			attrs={'class': 'form-control'}
+		),
+		label='Location',
+		required=False,
+		max_length=100
+	)
+
 	def save(self,id):
 		this_user = User.objects.get(id__exact=id)
 		if self.cleaned_data["email"] and self.cleaned_data["email"] != this_user.email:
@@ -179,6 +142,8 @@ class ProfileForm(forms.Form):
 			this_user.username = self.cleaned_data["user_name"]
 		if self.cleaned_data['bio']:
 			this_user.profile.bio = self.cleaned_data["bio"]
+		if self.cleaned_data['location']:
+			this_user.profile.location = self.cleaned_data["location"]
 		this_user.save()
 		return this_user
 
@@ -227,6 +192,18 @@ class ProfileFilter(forms.Form):
 			}
 		),
 		label='Filter by Name',
+		required=False,
+		max_length=100
+	)
+
+	location = forms.CharField(
+		widget = forms.TextInput(
+			attrs={
+				'class': 'form-control font-weight-normal',
+				'id': 'issue_type'
+			}
+		),
+		label='Filter by Location',
 		required=False,
 		max_length=100
 	)
