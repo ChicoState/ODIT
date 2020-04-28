@@ -217,3 +217,75 @@ class ProfileFilter(forms.Form):
 		required=False,
 		max_length=100
 	)
+
+STARS = [
+	('5','5'),
+	('4','4'),
+	('3','3'),
+	('2','2'),
+	('1','1'),
+	('0','0'),
+]
+class AddReviewForm(forms.Form):
+	rating = forms.CharField(
+		widget = forms.Select(
+			choices=STARS,
+			attrs={'class': 'form-control'}
+		),
+		label='Rating',
+		required=True
+	)
+
+	review = forms.CharField(
+		label='Review',
+		widget=forms.Textarea(
+			attrs={'class': 'form-control'}
+		),
+		required=False,
+		max_length=240
+	)
+
+	def save(self, writer, subject):
+		review_instance = models.Review()
+		review_instance.rating = int(self.cleaned_data["rating"])
+		review_instance.review = self.cleaned_data["review"]
+		review_instance.writer = User.objects.get(id__exact=writer)
+		review_instance.subject = User.objects.get(id__exact=subject)
+		review_instance.save()
+		subject_instance = models.Profile.objects.get(user=review_instance.subject)
+		subject_instance.rating_count = subject_instance.rating_count + 1
+		subject_instance.rating_sum = subject_instance.rating_sum + review_instance.rating
+		subject_instance.rating_avg = round(subject_instance.rating_sum / subject_instance.rating_count,1)
+		subject_instance.save()
+		return review_instance
+
+class EditReviewForm(forms.Form):
+	rating = forms.CharField(
+		widget = forms.Select(
+			choices=STARS,
+			attrs={'class': 'form-control'}
+		),
+		label='Rating',
+		required=True
+	)
+
+	review = forms.CharField(
+		label='Review',
+		widget=forms.Textarea(
+			attrs={'class': 'form-control'}
+		),
+		required=False,
+		max_length=240
+	)
+
+	def save(self, id):
+		review_instance = models.Review.objects.get(id__exact=id)
+		subject_instance = models.Profile.objects.get(user=review_instance.subject)
+		subject_instance.rating_sum = subject_instance.rating_sum - review_instance.rating
+		review_instance.rating = int(self.cleaned_data["rating"])
+		subject_instance.rating_sum = subject_instance.rating_sum + review_instance.rating
+		review_instance.review = self.cleaned_data["review"]
+		subject_instance.rating_avg = round(subject_instance.rating_sum / subject_instance.rating_count,1)
+		subject_instance.save()
+		review_instance.save()
+		return review_instance

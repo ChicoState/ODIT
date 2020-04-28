@@ -224,41 +224,81 @@ def view_profile(request,user_id):
 		view_user = models.Profile.objects.get(user__id__exact=user_id)
 	except ObjectDoesNotExist:
 		return redirect("/viewtechnicians.html")
-	context = {
-		"title": "ODIT - {}".format(view_user.user.username),
-		"user_name": view_user.user.username,
-		"bio": view_user.bio,
-		"location": view_user.location,
-		"email": view_user.user.email,
-		"is_technician": this_user.user_type,
-	}
-	return render(request, "viewprofile.html", context=context)
+	if request.method == "POST":
+		form_instance = forms.AddReviewForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(this_user.user.id,view_user.user.id)
+			return redirect("/viewprofile/{}".format(view_user.id))
+	else:
+		if this_user != view_user and (not models.Review.objects.filter(writer=this_user.user).filter(subject=view_user.user).exists()) and models.Issue_Model.objects.filter(affected_user=this_user.user).filter(assigned_user=view_user.user).exists():
+			form = forms.AddReviewForm()
+		else:
+			form = False
+		context = {
+			"title": "ODIT - {}".format(view_user.user.username),
+			"user_name": view_user.user.username,
+			"bio": view_user.bio,
+			"location": view_user.location,
+			"email": view_user.user.email,
+			"form": form,
+			"reviews_list": models.Review.objects.filter(subject=view_user.user),
+			"rating": view_user.rating_avg,
+			"is_technician": this_user.user_type,
+		}
+		print(list(context['reviews_list']))
+		return render(request, "viewprofile.html", context=context)
 
 @login_required
 def viewmysubmittedissues(request):
-    issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
-    if request.method == "POST":
-        form = forms.IssueFilter(request.POST)
-        if form.is_valid(): 
-            if (form.cleaned_data['keyword']):
-                issues_list = issues_list.filter(
-                    Q(title__contains=form.cleaned_data['keyword']) |
-                    Q(description__contains=form.cleaned_data['keyword']) |
-                    Q(affected_user__username__contains=form.cleaned_data['keyword'])
-                )
-            if (form.cleaned_data['issue_type']):
-                issues_list = issues_list.filter(
-                    Q(issue_type__exact=form.cleaned_data['issue_type'])
-                )
-        else:
-            form = forms.IssueFilter()
-    else:
-        form = forms.IssueFilter()
+	issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
+	if request.method == "POST":
+		form = forms.IssueFilter(request.POST)
+		if form.is_valid(): 
+			if (form.cleaned_data['keyword']):
+				issues_list = issues_list.filter(
+					Q(title__contains=form.cleaned_data['keyword']) |
+					Q(description__contains=form.cleaned_data['keyword']) |
+					Q(affected_user__username__contains=form.cleaned_data['keyword'])
+				)
+			if (form.cleaned_data['issue_type']):
+				issues_list = issues_list.filter(
+					Q(issue_type__exact=form.cleaned_data['issue_type'])
+				)
+		else:
+			form = forms.IssueFilter()
+	else:
+		form = forms.IssueFilter()
 
-    context = {
-        "title":"ODIT - Your Submitted Issues",
-        "issues_list":issues_list,
-        "form":form,
-        "is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
-    }
-    return render(request, "viewmysubmittedissues.html", context=context)
+	context = {
+		"title":"ODIT - Your Submitted Issues",
+		"issues_list":issues_list,
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+	}
+	return render(request, "viewmysubmittedissues.html", context=context)
+
+@login_required
+def edit_review(request,id):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	try:
+		this_review = models.Review.objects.get(id__exact=id)
+		view_user = models.Profile.objects.get(user__exact=this_review.subject)
+	except ObjectDoesNotExist:
+		return redirect("/viewtechnicians.html")
+	if request.method == "POST":
+		form_instance = forms.EditReviewForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewprofile/{}".format(view_user.user.id))
+	else:
+		if this_user == models.Review.objects.get(id__exact=id).writer.profile:
+			form = forms.EditReviewForm(initial={'rating':this_review.rating,'review':this_review.review})
+			context = {
+				"title": "ODIT - Edit Review for {}".format(view_user.user.username),
+				"form": form,
+				"id": view_user.user.id,
+				"is_technician": this_user.user_type,
+			}
+			return render(request, "editreview.html", context=context)
+		else:
+			return redirect("/viewprofile/{}".format(view_user.user.id))
