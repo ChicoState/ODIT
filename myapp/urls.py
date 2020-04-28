@@ -34,6 +34,7 @@ urlpatterns = [
 	path('profile/become_technician',views.become_technician),
 	path('viewtechnicians.html',views.view_technicians),
 	path('viewprofile/<int:user_id>',views.view_profile),
+	path('editreview/<int:id>',views.edit_review),
     path('login/', auth_views.LoginView.as_view()),
     path('register/', views.register),
     path('logout/', views.logoff)

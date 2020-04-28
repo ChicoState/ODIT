@@ -30,14 +30,16 @@
 				{% if issues_list.count > 0 %}
 					{% comment %} TODO: Add a filter form to this list, too {% endcomment %}
 					{% for issue in issues_list %}
-					<div class="card bg-light">
+					<div class="card bg-light mb-1">
 						<div class="card-header">{{ issue.title|title }}</div>
 						<div class="card-body px-1 py-1">
 							<div class="border border-secondary rounded px-2 py-2">
 								<p>{{ issue.description }}</p>
 							</div>
 							<p>Date Created: {{ issue.date_created }}</p>
-							<p>Issue type: {{ issue.issue_type }}</p>
+							<p>Issue Type: {{ issue.issue_type }}</p>
+							<p>Assigned Technician: {{ issue.assigned_user }} {% if issue.assigned_user %}<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">View Profile</a>{% endif %}</p>
+							<p>Issue solved?: {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
 						</div>
 					</div>
 					{% endfor %}
