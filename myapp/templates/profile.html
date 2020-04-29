@@ -17,9 +17,12 @@
 			{% if is_technician %}
 			<h2>Bio:</h2>
 			<p>{{ bio }}</p>
+			<h2>Location:</h2>
+			<p>{{ location }}</p>
 			{% else %}
-			<a class="btn btn-primary my-2" href="/profile/become_technician">Sign Up to be a Technician!</a>
+			<a class="btn btn-primary my-2" href="/profile/become_technician">Sign Up to be a Technician!</a><br>
 			{% endif %}
+			<a class="btn btn-primary" href="/profile/edit.html">Edit Profile</a>
 		</div>
 	</div>
 </div>

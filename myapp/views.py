@@ -93,7 +93,7 @@ def viewmyissues(request):
 		form = forms.IssueFilter()
 
 	context = {
-		"title":"ODIT - View Requests",
+		"title":"ODIT - View Assignments",
 		"issues_list":issues_list,
 		"form":form,
 		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
@@ -148,6 +148,7 @@ def profile_page(request):
 		"title": "ODIT - {}".format(request.user.username),
 		"user_name": request.user.username,
 		"bio": this_user.bio,
+		"location": this_user.location,
 		"email": request.user.email,
 		"is_technician": this_user.user_type,
 	}
@@ -163,7 +164,7 @@ def edit_profile(request):
 			return redirect("/profile.html")
 	else:
 		if this_user.user_type:
-			form_instance = forms.ProfileForm(initial={'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
+			form_instance = forms.ProfileForm(initial={'location':this_user.location,'bio':this_user.bio,'email':request.user.email,'user_name':request.user.username})
 		else:
 			form_instance = forms.ProfileFormNontech(initial={'email':request.user.email,'user_name':request.user.username})
 	context = {
@@ -192,10 +193,15 @@ def view_technicians(request):
 			if (form.cleaned_data['keyword']):
 				profile_list = profile_list.filter(
 					Q(bio__contains=form.cleaned_data['keyword']) |
-					Q(user__username__contains=form.cleaned_data['keyword'])
+					Q(user__username__contains=form.cleaned_data['keyword']) |
+					Q(location__contains=form.cleaned_data['keyword'])
 				)
 			if (form.cleaned_data['name']):
-				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['user_name'])
+				profile_list = profile_list.filter(user__username__contains=form.cleaned_data['name'])
+			if (form.cleaned_data['location']):
+				profile_list = profile_list.filter(
+					Q(location__contains=form.cleaned_data['location'])
+				)
 		else:
 			form = forms.ProfileFilter()
 			profile_list = models.Profile.objects.filter(user_type=True)
@@ -218,40 +224,128 @@ def view_profile(request,user_id):
 		view_user = models.Profile.objects.get(user__id__exact=user_id)
 	except ObjectDoesNotExist:
 		return redirect("/viewtechnicians.html")
-	context = {
-		"title": "ODIT - {}".format(view_user.user.username),
-		"user_name": view_user.user.username,
-		"bio": view_user.bio,
-		"email": view_user.user.email,
-		"is_technician": this_user.user_type,
-	}
-	return render(request, "viewprofile.html", context=context)
+	if request.method == "POST":
+		form_instance = forms.AddReviewForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(this_user.user.id,view_user.user.id)
+			return redirect("/viewprofile/{}".format(view_user.id))
+	else:
+		if this_user != view_user and (not models.Review.objects.filter(writer=this_user.user).filter(subject=view_user.user).exists()) and models.Issue_Model.objects.filter(affected_user=this_user.user).filter(assigned_user=view_user.user).exists():
+			form = forms.AddReviewForm()
+		else:
+			form = False
+		context = {
+			"title": "ODIT - {}".format(view_user.user.username),
+			"user_name": view_user.user.username,
+			"bio": view_user.bio,
+			"location": view_user.location,
+			"email": view_user.user.email,
+			"form": form,
+			"reviews_list": models.Review.objects.filter(subject=view_user.user),
+			"rating": view_user.rating_avg,
+			"is_technician": this_user.user_type,
+		}
+		print(list(context['reviews_list']))
+		return render(request, "viewprofile.html", context=context)
 
 @login_required
 def viewmysubmittedissues(request):
-    issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
-    if request.method == "POST":
-        form = forms.IssueFilter(request.POST)
-        if form.is_valid(): 
-            if (form.cleaned_data['keyword']):
-                issues_list = issues_list.filter(
-                    Q(title__contains=form.cleaned_data['keyword']) |
-                    Q(description__contains=form.cleaned_data['keyword']) |
-                    Q(affected_user__username__contains=form.cleaned_data['keyword'])
-                )
-            if (form.cleaned_data['issue_type']):
-                issues_list = issues_list.filter(
-                    Q(issue_type__exact=form.cleaned_data['issue_type'])
-                )
-        else:
-            form = forms.IssueFilter()
-    else:
-        form = forms.IssueFilter()
+	issues_list = models.Issue_Model.objects.filter(affected_user=request.user)
+	if request.method == "POST":
+		form = forms.IssueFilter(request.POST)
+		if form.is_valid(): 
+			if (form.cleaned_data['keyword']):
+				issues_list = issues_list.filter(
+					Q(title__contains=form.cleaned_data['keyword']) |
+					Q(description__contains=form.cleaned_data['keyword']) |
+					Q(affected_user__username__contains=form.cleaned_data['keyword'])
+				)
+			if (form.cleaned_data['issue_type']):
+				issues_list = issues_list.filter(
+					Q(issue_type__exact=form.cleaned_data['issue_type'])
+				)
+		else:
+			form = forms.IssueFilter()
+	else:
+		form = forms.IssueFilter()
 
-    context = {
-        "title":"ODIT - Your Submitted Issues",
-        "issues_list":issues_list,
-        "form":form,
-        "is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
-    }
-    return render(request, "viewmysubmittedissues.html", context=context)
+	context = {
+		"title":"ODIT - Your Submitted Issues",
+		"issues_list":issues_list,
+		"form":form,
+		"is_technician": models.Profile.objects.get(user__exact=request.user).user_type,
+	}
+	return render(request, "viewmysubmittedissues.html", context=context)
+
+@login_required
+def edit_review(request,id):
+	this_user = models.Profile.objects.get(user__exact=request.user)
+	try:
+		this_review = models.Review.objects.get(id__exact=id)
+		view_user = models.Profile.objects.get(user__exact=this_review.subject)
+	except ObjectDoesNotExist:
+		return redirect("/viewtechnicians.html")
+	if request.method == "POST":
+		form_instance = forms.EditReviewForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewprofile/{}".format(view_user.user.id))
+	else:
+		if this_user == models.Review.objects.get(id__exact=id).writer.profile:
+			form = forms.EditReviewForm(initial={'rating':this_review.rating,'review':this_review.review})
+			context = {
+				"title": "ODIT - Edit Review for {}".format(view_user.user.username),
+				"form": form,
+				"id": view_user.user.id,
+				"is_technician": this_user.user_type,
+			}
+			return render(request, "editreview.html", context=context)
+		else:
+			return redirect("/viewprofile/{}".format(view_user.user.id))
+
+@login_required
+def resolve_ticket(request, id):
+	try:
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+	except ObjectDoesNotExist:
+		return redirect("/viewmyissues.html")
+	if request.method == "POST":
+		form_instance = forms.ResolveIssueForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewmyissues.html")
+	else:
+		if this_ticket == models.Issue_Model.objects.get(id__exact=id):
+			form = forms.ResolveIssueForm(initial={'Resolved?':this_ticket.is_solved,'Resolution':this_ticket.resolution})
+			context = {
+				"title": "ODIT - Resolve Ticket",
+				"form": form,
+				"id": this_ticket,
+			}
+			return render(request, "editticket.html", context=context)
+		else:
+			return redirect("/viewmyissues")
+
+@login_required
+def edit_ticket(request, id):
+	try:
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+	except ObjectDoesNotExist:
+		return redirect("/viewmysubmittedissues.html")
+	if request.method == "POST":
+		form_instance = forms.EditIssueForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewmysubmittedissues.html")
+	else:
+		if this_ticket == models.Issue_Model.objects.get(id__exact=id):
+			form = forms.EditIssueForm(initial={'title':this_ticket.title,'description':this_ticket.description,'issue_type':this_ticket.issue_type})
+			context = {
+				"title": "ODIT - Edit Ticket",
+				"form": form,
+				"id": this_ticket,
+			}
+			return render(request, "editticket.html", context=context)
+		else:
+			return redirect("/viewmyissues")
+			

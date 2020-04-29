@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="container mb-2 card bg-secondary py-2">
-    <h3 class="card bg-light px-2">Search for posted issues:</h3>
+    <h3 class="card bg-light px-2">Search for Requests:</h3>
     <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col col-md-4">
@@ -32,17 +32,18 @@
         {% if issues_list %}
             {% for i in issues_list %}
             <div class="card bg-light my-2">
-                <div class="card-header">Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
+                <div class="card-header">
+                    Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
                 </div>
                 <div class="card-body">
                 <p>Description: {{ i.description }}</p>
                 <p>Date created: {{ i.date_created }}</p>
                 <p>Issue type: {{ i.issue_type }}</p>
-                <p>Assigned user: {{ i.assigned_user }}</p>
-                <p>Affected user: {{ i.affected_user }}</p>
+                <p>Assigned user: {{ i.assigned_user }} {% if i.assigned_user %}<a class="btn btn-secondary" href="viewprofile/{{ i.assigned_user.id }}">View Profile</a>{% endif %}</p>
+                <p>Affected user: {{ i.affected_user }} {% if i.affected_user %}<a class="btn btn-secondary" href="viewprofile/{{ i.affected_user.id }}">View Profile</a>{% endif %}</p>
                 <p>Issue solved?: {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
-                {% if is_technician and user != i.assigned_user and user != i.affected_user %}
-                <a class="btn btn-secondary" href="/viewissues/assign/{{i.id}}">Assign Myself</a>
+                {% if is_technician and user != i.assigned_user and user != i.affected_user and i.is_solved == False %}
+                    <a class="btn btn-success" href="/viewissues/assign/{{i.id}}">Assign Issue</a>
                 {% endif %}
                 </div>
             </div>
