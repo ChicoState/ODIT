@@ -11,12 +11,27 @@ def must_be_unique_email(value):
 	if len(user) > 0:
 		raise forms.ValidationError("A user with that email already exists.")
 
-# validator to ensure email addresses are unique
+# validator to ensure usernames are unique
 def must_be_unique_user(value):
 	user = User.objects.filter(username=value)
 	if len(user) > 0:
 		raise forms.ValidationError("A user with that username already exists.")
 
+
+ISSUE_CHOICES = [
+	('Desktop', 'Desktop'),
+	('Laptop', 'Laptop'),
+	('Tablet', 'Tablet'),
+	('Phone', 'Phone'),
+	('Server', 'Server'),
+	('Networking', 'Networking'),
+	('Application', 'Application'),
+	('Operating System', 'Operating System'),
+	('Email', 'Email'),
+	('Account Management', 'Account Management'),
+	('Lost Password', 'Lost Password'),
+	('Other', 'Other')
+]
 class IssueForm(forms.Form):
 	title = forms.CharField(
 		widget = forms.TextInput(
@@ -36,11 +51,9 @@ class IssueForm(forms.Form):
 		max_length=240
 	)
 
-	issue_type = forms.IntegerField(
-		widget = forms.TextInput(
-			attrs={'class': 'form-control'}
-		),
+	issue_type = forms.CharField(
 		label='Issue Type',
+		widget=forms.Select(choices=ISSUE_CHOICES),
 		required=True
 	)
 
@@ -67,7 +80,7 @@ class IssueFilter(forms.Form):
 		max_length=100
 	)
 
-	issue_type = forms.IntegerField(
+	issue_type = forms.CharField(
 		widget = forms.TextInput(
 			attrs={
 				'class': 'form-control',
@@ -289,3 +302,57 @@ class EditReviewForm(forms.Form):
 		subject_instance.save()
 		review_instance.save()
 		return review_instance
+
+class ResolveIssueForm(forms.Form):
+	resolution = forms.CharField(
+		widget=forms.Textarea(
+			attrs={'class': 'form-control'}
+		),
+		label='Resolution',
+		required=False,
+		max_length=720
+	)
+
+	def save(self, id):
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+		this_ticket.is_solved = 1
+		if self.cleaned_data['resolution']:
+			this_ticket.resolution = self.cleaned_data["resolution"]
+		this_ticket.save()
+		return this_ticket
+
+class EditIssueForm(forms.Form):
+	title = forms.CharField(
+		widget = forms.TextInput(
+			attrs={'class': 'form-control'}
+		),
+		label='Title',
+		required=True,
+		max_length=100
+	)
+
+	description = forms.CharField(
+		label='Description',
+		widget=forms.Textarea(
+			attrs={'class': 'form-control'}
+		),
+		required=False,
+		max_length=240
+	)
+
+	issue_type = forms.CharField(
+		label='Issue Type',
+		widget=forms.Select(choices=ISSUE_CHOICES),
+		required=True
+	)
+
+	def save(self, id):
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+		if self.cleaned_data['title']:
+			this_ticket.title = self.cleaned_data["title"]
+		if self.cleaned_data['description']:
+			this_ticket.description = self.cleaned_data["description"]
+		if self.cleaned_data['issue_type']:
+			this_ticket.issue_type = self.cleaned_data["issue_type"]
+		this_ticket.save()
+		return this_ticket

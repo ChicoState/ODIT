@@ -302,3 +302,50 @@ def edit_review(request,id):
 			return render(request, "editreview.html", context=context)
 		else:
 			return redirect("/viewprofile/{}".format(view_user.user.id))
+
+@login_required
+def resolve_ticket(request, id):
+	try:
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+	except ObjectDoesNotExist:
+		return redirect("/viewmyissues.html")
+	if request.method == "POST":
+		form_instance = forms.ResolveIssueForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewmyissues.html")
+	else:
+		if this_ticket == models.Issue_Model.objects.get(id__exact=id):
+			form = forms.ResolveIssueForm(initial={'Resolved?':this_ticket.is_solved,'Resolution':this_ticket.resolution})
+			context = {
+				"title": "ODIT - Resolve Ticket",
+				"form": form,
+				"id": this_ticket,
+			}
+			return render(request, "editticket.html", context=context)
+		else:
+			return redirect("/viewmyissues")
+
+@login_required
+def edit_ticket(request, id):
+	try:
+		this_ticket = models.Issue_Model.objects.get(id__exact=id)
+	except ObjectDoesNotExist:
+		return redirect("/viewmysubmittedissues.html")
+	if request.method == "POST":
+		form_instance = forms.EditIssueForm(request.POST)
+		if form_instance.is_valid():
+			form_instance.save(id)
+			return redirect("/viewmysubmittedissues.html")
+	else:
+		if this_ticket == models.Issue_Model.objects.get(id__exact=id):
+			form = forms.EditIssueForm(initial={'title':this_ticket.title,'description':this_ticket.description,'issue_type':this_ticket.issue_type})
+			context = {
+				"title": "ODIT - Edit Ticket",
+				"form": form,
+				"id": this_ticket,
+			}
+			return render(request, "editticket.html", context=context)
+		else:
+			return redirect("/viewmyissues")
+			
