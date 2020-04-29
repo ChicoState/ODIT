@@ -17,7 +17,6 @@ def must_be_unique_user(value):
 	if len(user) > 0:
 		raise forms.ValidationError("A user with that username already exists.")
 
-
 ISSUE_CHOICES = [
 	('Desktop', 'Desktop'),
 	('Laptop', 'Laptop'),
@@ -121,6 +120,7 @@ class RegistrationForm(UserCreationForm):
 		return user
 
 class ProfileForm(forms.Form):
+	"""
 	user_name = forms.CharField(
 		widget = forms.TextInput(
 			attrs={'class': 'form-control'}
@@ -130,11 +130,12 @@ class ProfileForm(forms.Form):
 		validators=[must_be_unique_user],
 		max_length=150
 	)
-	
+	"""
+
 	email = forms.EmailField(
 		label="Email",
-		required=False,
-		validators=[must_be_unique_email]
+		required=False
+		#validators=[must_be_unique_email]
 	)
 
 	bio = forms.CharField(
@@ -159,8 +160,8 @@ class ProfileForm(forms.Form):
 		this_user = User.objects.get(id__exact=id)
 		if self.cleaned_data["email"] and self.cleaned_data["email"] != this_user.email:
 			this_user.email = self.cleaned_data["email"]
-		if self.cleaned_data['user_name']:
-			this_user.username = self.cleaned_data["user_name"]
+		#if self.cleaned_data['user_name']:
+		#	this_user.username = self.cleaned_data["user_name"]
 		if self.cleaned_data['bio']:
 			this_user.profile.bio = self.cleaned_data["bio"]
 		if self.cleaned_data['location']:
@@ -169,6 +170,7 @@ class ProfileForm(forms.Form):
 		return this_user
 
 class ProfileFormNontech(forms.Form):
+	"""
 	user_name = forms.CharField(
 		widget = forms.TextInput(
 			attrs={'class': 'form-control'}
@@ -178,10 +180,11 @@ class ProfileFormNontech(forms.Form):
 		validators=[must_be_unique_user],
 		max_length=150
 	)
+	"""
 	
 	email = forms.EmailField(
 		label="Email",
-		validators=[must_be_unique_email],
+		#validators=[must_be_unique_email],
 		required=False
 	)
 
@@ -189,8 +192,8 @@ class ProfileFormNontech(forms.Form):
 		this_user = User.objects.get(id__exact=id)
 		if self.cleaned_data["email"] and self.cleaned_data["email"] != this_user.email:
 			this_user.email = self.cleaned_data["email"]
-		if self.cleaned_data['user_name']:
-			this_user.username = self.cleaned_data["user_name"]
+		#if self.cleaned_data['user_name']:
+		#	this_user.username = self.cleaned_data["user_name"]
 		this_user.save()
 		return this_user
 
