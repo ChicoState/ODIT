@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="container mb-2 card bg-secondary">
-    <h3 class="card bg-primary font-weight-bold">My Assigned Issues:</h3>
+    <h3 class="card bg-primary font-weight-bold">My Assigned Requests:</h3>
     <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col col-md-4">
@@ -26,7 +26,7 @@
             {% for i in issues_list %}
             <div class="card bg-light my-2">
                 <div class="card-header">
-                    Ticket #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
+                    Issue #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
                 </div>
                 <div class="card-body">
                 <p>Description: {{ i.description }}</p>
@@ -35,7 +35,9 @@
                 <p>Affected user: {{ i.affected_user }} {% if i.affected_user %}<a class="btn btn-secondary" href="viewprofile/{{ i.affected_user.id }}">View Profile</a>{% endif %}</p>
                 <p>Issue solved?: {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
                 {% if i.is_solved == False %}
-                    <a class="btn btn-secondary" href="/viewmyissues/resolve/{{i.id}}">Resolve?</a>
+                    <a class="btn btn-success" href="/resolve/{{i.id}}">Resolve?</a>
+                {% else %}
+                    <p>Resolution: {{ i.resolution }}</p>
                 {% endif %}
                 </div>
             </div>
