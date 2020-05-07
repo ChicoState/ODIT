@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Issue_Model(models.Model):
 	title = models.CharField(max_length=100)
 	description = models.CharField(max_length=240, null=True)
-	issue_type = models.IntegerField()
+	issue_type = models.CharField(max_length=240)
 	date_created = models.DateField(auto_now_add=True)
 	assigned_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='assigned_user')
 	affected_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='affected_user')

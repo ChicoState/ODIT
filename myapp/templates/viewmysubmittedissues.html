@@ -40,6 +40,7 @@
 							<p>Issue Type: {{ issue.issue_type }}</p>
 							<p>Assigned Technician: {{ issue.assigned_user }} {% if issue.assigned_user %}<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">View Profile</a>{% endif %}</p>
 							<p>Issue solved?: {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
+							<a class="btn btn-secondary" href="editticket/{{ issue.id }}">Edit Issue</a>
 						</div>
 					</div>
 					{% endfor %}

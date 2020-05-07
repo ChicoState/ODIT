@@ -15,9 +15,9 @@
 				{% if user.is_authenticated %}
 					<li class="nav-item"><a class="nav-link" href="/submit.html">Submit Request</a></li>
 					<li class="nav-item"><a class="nav-link" href="/viewmysubmittedissues.html">View my Submitted Requests</a></li>
+					<li class="nav-item"><a class="nav-link" href="/viewissues.html">View All Requests</a></li>
 					{% if is_technician %}
-						<li class="nav-item"><a class="nav-link" href="/viewissues.html">View All Requests</a></li>
-						<li class="nav-item"><a class="nav-link" href="/viewmyissues.html">View Assignments</a></li>
+						<li class="nav-item"><a class="nav-link" href="/viewmyissues.html">View My Assignments</a></li>
 					{% endif %}
 					<li class="nav-item"><a class="nav-link" href="/viewtechnicians.html">Find a Technician</a></li>
 				{% endif %}
