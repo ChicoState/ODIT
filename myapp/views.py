@@ -347,5 +347,10 @@ def edit_ticket(request, id):
 			}
 			return render(request, "editticket.html", context=context)
 		else:
+<<<<<<< HEAD
 			return redirect("/viewmyissues")
 			
+=======
+			return redirect("/viewmysubmittedissues.html")
+			
+>>>>>>> 9dc5889060e9532d6f7df1dda408225c4a5bed8e

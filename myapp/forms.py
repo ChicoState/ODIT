@@ -52,7 +52,10 @@ class IssueForm(forms.Form):
 
 	issue_type = forms.CharField(
 		label='Issue Type',
-		widget=forms.Select(choices=ISSUE_CHOICES),
+		widget=forms.Select(
+			choices=ISSUE_CHOICES,
+			attrs={'class': 'form-control'}
+		),
 		required=True
 	)
 
@@ -345,7 +348,10 @@ class EditIssueForm(forms.Form):
 
 	issue_type = forms.CharField(
 		label='Issue Type',
-		widget=forms.Select(choices=ISSUE_CHOICES),
+		widget=forms.Select(
+			choices=ISSUE_CHOICES,
+			attrs={'class': 'form-control'}
+		),
 		required=True
 	)
 
