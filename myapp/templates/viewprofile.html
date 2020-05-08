@@ -1,47 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
+{% load myfilters %}
 
 {% load static %}
 
-<h1>{{ user_name }} ({{ rating }} Stars)</h1>
-<h2>Email: {{ email }}</h2>
-<h2>Bio:</h2>
-<p>{{ bio }}</p>
-<h2>Location:</h2>
-<p>{{ location }}</p>
-{% if form %}
-<br>
-<h2>Leave a Review:</h2>
-<div class="container d-flex m-0 p-0 justify-content-start">
-    <div class="row d-flex m-0 p-0 justify-content-start">
-        <div class="col-md-12 p-0 mx-0 flex-column align-items-left">
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-group ml-2 mr-2">
-                {% csrf_token %}
-                <table>{{ form.as_table }}</table><br>
-                <input type="submit" class="btn btn-primary" value="Post Review">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-{% endif %}
-{% if reviews_list %}
-	<br>
-	<h2>Reviews</h2>
-	{% for r in reviews_list %}
-	<div class="card bg-light my-2">
-		<div class="card-header">
-			<p>{{ r.writer }} gave {{ r.subject }} {{ r.rating }} stars on {{ r.date_created }}{% if r.writer %}: <a class="btn btn-secondary" href="/viewprofile/{{ r.writer.id }}">View Profile</a>{% endif %}</p>
+<div class="row mx-4">
+	<div class="col">
+		<h1>{{ user_name }}</h1>
+		<h2>Current rating: {% for star in rating|int_range %}⭐{% endfor %}</h2>
+		<h2>Email: {{ email }}</h2>
+		<h2>Bio:</h2>
+		<p>{{ bio }}</p>
+		<h2>Location:</h2>
+		<p>{{ location }}</p>
+		{% if form %}
+		<br>
+		<h2>Leave a Review:</h2>
+		<div class="container d-flex m-0 p-0 justify-content-start">
+			<div class="row d-flex m-0 p-0 justify-content-start">
+				<div class="col-md-12 p-0 mx-0 flex-column align-items-left">
+					<form method="post" enctype="multipart/form-data">
+						<div class="form-group ml-2 mr-2">
+						{% csrf_token %}
+						<table>{{ form.as_table }}</table><br>
+						<input type="submit" class="btn btn-primary" value="Post Review">
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
-		<div class="card-body">
-		<p>{{ r.review }}</p>
-		{% if r.writer == user %}
-			<a class="btn btn-secondary" href="/editreview/{{r.id}}">Edit</a>
 		{% endif %}
-		</div>
+		{% if reviews_list %}
+			<br>
+			<h2>Reviews</h2>
+			{% for r in reviews_list %}
+			<div class="card bg-light my-2">
+				<div class="card-header">
+					<p>{{ r.writer }} gave {{ r.subject }} {{ r.rating }} stars on {{ r.date_created }}{% if r.writer %}<a class="btn btn-secondary ml-2" href="/viewprofile/{{ r.writer.id }}">View Profile</a>{% endif %}</p>
+				</div>
+				<div class="card-body">
+				<p class="mt-n4">{{ r.review|linebreaks }}</p>
+				{% if r.writer == user %}
+					<a class="btn btn-secondary" href="/editreview/{{r.id}}">Edit</a>
+				{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+		{% endif %}
 	</div>
-	{% endfor %}
-{% endif %}
-
+</div>
 {% endblock %}

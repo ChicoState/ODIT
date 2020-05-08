@@ -21,35 +21,64 @@
 	</div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col ml-2 mr-2">
-			<div class="card bg-secondary mb-2">
-				<div class="card-header">Issues you have submitted:</div>
-				<div class="card-body">
-				{% if issues_list.count > 0 %}
-					{% comment %} TODO: Add a filter form to this list, too {% endcomment %}
-					{% for issue in issues_list %}
-					<div class="card bg-light mb-1">
-						<div class="card-header">{{ issue.title|title }}</div>
-						<div class="card-body px-1 py-1">
-							<div class="border border-secondary rounded px-2 py-2">
-								<p>{{ issue.description }}</p>
-							</div>
-							<p>Date Created: {{ issue.date_created }}</p>
-							<p>Issue Type: {{ issue.issue_type }}</p>
-							<p>Assigned Technician: {{ issue.assigned_user }} {% if issue.assigned_user %}<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">View Profile</a>{% endif %}</p>
-							<p>Issue solved?: {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
-							<a class="btn btn-secondary" href="editticket/{{ issue.id }}">Edit Issue</a>
+<div class="row mx-4">
+	<div class="col">
+		<h3>Requests you have submitted:</h3>
+		{% if issues_list.count > 0 %}
+		<div class="accordion" id="accordionExample">
+			{% for issue in issues_list %}
+			<div class="card bg-light">
+				<div class="card-header" id="heading{{ forloop.counter }}">
+					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+					{{ issue.title|title }}
+					</button>
+				</div>
+				<div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+					<div class="card-body px-1 py-1">
+						<h5>Request type: {{ issue.issue_type }}</h5>
+						<div class="border border-secondary px-2 mb-2">
+							<p>{{ issue.description|linebreaks }}</p>
+						</div>
+						<p>Request solved?: {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
+						<a class="btn btn-secondary" href="editticket/{{ issue.id }}">Edit Issue</a>
+						<hr>
+						<h4>Request details:</h4>
+						<div style="font-size: 14px;">
+						<table class="table table-bordered">
+						<tr>
+							<th>
+								Date Created:
+							</th>
+							<th>
+								Assigned Technician:
+							</th>
+						</tr>
+						<tr>
+							<td>
+								<p>{{ issue.date_created }}</p>
+							</td>
+							<td>
+								<p>
+									{% if issue.assigned_user %}
+									<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">
+									{{ issue.assigned_user }}
+									</a>
+									{% else %}
+									None at the moment
+									{% endif %}
+								</p>
+							</td>
+						</tr>
+						</table>
 						</div>
 					</div>
-					{% endfor %}
-				{% else %}
-				<p>Nothing found! {% comment %} We hope you continue to have zero problems with your technology. Feel free to <a href="/submit.html">submit a request</a> when a problem does pop up.{% endcomment %}</p> 
-				{% endif %}
 				</div>
 			</div>
+			{% endfor %}
 		</div>
+		{% else %}
+		<p>Nothing found!</p> 
+		{% endif %}
 	</div>
 </div>
 
