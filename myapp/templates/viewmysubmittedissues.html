@@ -2,22 +2,25 @@
 {% block content %}
 
 <div class="container">
+	{% comment %} <button class="btn btn-primary mb-2 mx-auto" type="button" data-toggle="collapse" data-target="#search" aria-expanded="false">Refine your search</button> {% endcomment %}
 	{% comment %} User's own issues {% endcomment %}
-	<div class="card card-body bg-secondary mb-2">
-		<form method="post" enctype="multipart/form-data">
-			<div class="row">
-				<div class="col col-md-4">
-					<div class="form-group">
-						{% csrf_token %}
-						<table>{{ form.as_table }}</table>
+	<div id="search" class="card bg-secondary mb-2">
+		<div id="search" class="card-body">
+			<form method="post" enctype="multipart/form-data">
+				<div class="row">
+					<div class="col col-md-4">
+						<div class="form-group">
+							{% csrf_token %}
+							<table>{{ form.as_table }}</table>
+						</div>
+					</div>
+					<div class="col col-sm justify-content-center">
+						<input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
+						<a class="btn btn-secondary btn-outline-light" href="/viewmysubmittedissues.html">Clear</a>
 					</div>
 				</div>
-				<div class="col col-sm justify-content-center">
-					<input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
-					<a class="btn btn-secondary btn-outline-light" href="/viewmysubmittedissues.html">Clear</a>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
 
@@ -34,12 +37,12 @@
 					</button>
 				</div>
 				<div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
-					<div class="card-body px-1 py-1">
+					<div class="card-body">
 						<h5>Request type: {{ issue.issue_type }}</h5>
 						<div class="border border-secondary px-2 mb-2">
 							<p>{{ issue.description|linebreaks }}</p>
 						</div>
-						<p>Request solved?: {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
+						<p>Request solved? {% if issue.is_solved == True %} Yes {% else %} No {% endif %}</p>
 						<a class="btn btn-secondary" href="editticket/{{ issue.id }}">Edit Issue</a>
 						<hr>
 						<h4>Request details:</h4>
