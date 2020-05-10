@@ -4,15 +4,23 @@
 {% load static %}
 <div class="container">
     <div class="row justify-content-center align-items-center">
-        <div class="col-sm-1 mx-auto d-flex flex-column align-items-center"></div>
         <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
-            
             <form method="post" enctype="multipart/form-data">
-                <div class="form-group ml-2 mr-2">
+                <div class="form-group">
                 {% csrf_token %}
-                <table>{{ form.as_table }}</table><br>
+                {% comment %} Daniel speaking:
+                Credit goes to this CodePen (https://codepen.io/neilpomerleau/pen/wzxzQr?editors=1111)
+                for this neat little rating system.
+
+                TODO: Implement at some point.
+                {% endcomment %}
+                {% for field in form %}
+                <p class="mb-1">{{ field.label_tag }}</p>
+                <p class="mb-2">{{ field }}</p>
+                {% endfor %}
+                <br>
                 <input type="submit" class="btn btn-primary" value="Confirm Changes">
-				<a href="/viewprofile/{{ id }}" class="btn-btn-secondary">Cancel</a>
+				        <a href="/viewprofile/{{ id }}" class="btn btn-secondary ml-2">Cancel</a>
                 </div>
             </form>
         </div>

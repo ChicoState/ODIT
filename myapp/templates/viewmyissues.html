@@ -1,51 +1,74 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mb-2 card bg-secondary">
-    <h3 class="card bg-primary font-weight-bold">My Assigned Requests:</h3>
-    <form method="post" enctype="multipart/form-data">
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="form-group">
-                {% csrf_token %}
-                <table>{{ form.as_table }}</table>
+<div class="container">
+    <div class="card bg-secondary mb-2">
+        <div class="card-header"><bold>Search your Assigned Requests:</bold></div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col col-md-4">
+                        <div class="form-group">
+                        {% csrf_token %}
+                        <table>{{ form.as_table }}</table>
+                        </div>
+                    </div>
+                    <div class="col col-sm justify-content-center">
+                        <input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
+                        <a class="btn btn-secondary btn-outline-light" href="/viewmyissues.html">Clear</a>
+                    </div>
                 </div>
-            </div>
-            <div class="col col-sm justify-content-center">
-                <input type="submit" class="btn btn-primary mb-2" value="Filter"><br>
-                <a class="btn btn-secondary btn-outline-light" href="/viewmyissues.html">Clear</a>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col ml-2 mr-2">
-        {% if issues_list %}
-            {% for i in issues_list %}
-            <div class="card bg-light my-2">
-                <div class="card-header">
-                    Issue #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
-                </div>
+<div class="row">
+    <div class="col ml-2 mr-2">
+    {% if issues_list %}
+    <div class="accordion" id="accordionExample">
+        {% for i in issues_list %}
+        <div class="card bg-light">
+            <div class="card-header" id="heading{{ forloop.counter }}">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                Request #{{ i.id }}: <span class="bg-primary text-white px-1 py-1 rounded">{{ i.title|title }}</span>
+                </button>
+            </div>
+            <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
                 <div class="card-body">
-                <p>Description: {{ i.description }}</p>
-                <p>Date created: {{ i.date_created }}</p>
-                <p>Issue type: {{ i.issue_type }}</p>
-                <p>Affected user: {{ i.affected_user }} {% if i.affected_user %}<a class="btn btn-secondary" href="viewprofile/{{ i.affected_user.id }}">View Profile</a>{% endif %}</p>
-                <p>Issue solved?: {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
-                {% if i.is_solved == False %}
-                    <a class="btn btn-success" href="/resolve/{{i.id}}">Resolve?</a>
-                {% else %}
-                    <p>Resolution: {{ i.resolution }}</p>
-                {% endif %}
+                    <h5>Request type: {{ i.issue_type }}</h5>
+						<div class="border border-secondary px-2 mb-2">
+							<p>{{ i.description|linebreaks }}</p>
+						</div>
+						<p>Request solved? {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
+                        {% if i.is_solved == False %}
+                            <a class="btn btn-success" href="/resolve/{{i.id}}">Resolve?</a>
+                        {% else %}
+                            <p>Resolution: {{ i.resolution }}</p>
+                        {% endif %}
+						<hr>
+						<h4>Request details:</h4>
+						<div style="font-size: 14px;">
+						<table class="table table-bordered">
+						<tr>
+							<th>
+								Date Created:
+							</th>
+						</tr>
+						<tr>
+							<td>
+								<p>{{ i.date_created }}</p>
+							</td>
+						</tr>
+						</table>
                 </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <p>There are no entries with those parameters.</p>
-        {% endif %}
         </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>There are no requests that contain what you searched.</p>
+    {% endif %}
     </div>
 </div>
 

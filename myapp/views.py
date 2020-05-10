@@ -348,4 +348,3 @@ def edit_ticket(request, id):
 			return render(request, "editticket.html", context=context)
 		else:
 			return redirect("/viewmysubmittedissues.html")
-			
