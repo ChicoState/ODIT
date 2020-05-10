@@ -51,11 +51,11 @@ class IssueForm(forms.Form):
 	)
 
 	issue_type = forms.CharField(
-		label='Issue Type',
-		widget=forms.Select(
-			choices=ISSUE_CHOICES,
-			attrs={'class': 'form-control'}
+		widget = forms.Select(
+			attrs = {'class': 'form-control'},
+			choices=ISSUE_CHOICES
 		),
+		label='Issue Type',
 		required=True
 	)
 
@@ -89,7 +89,7 @@ class IssueFilter(forms.Form):
 				'id': 'issue_type'
 			}
 		),
-		label='Filter by Issue Type',
+		label='Filter by Request Type',
 		required=False
 	)
 
@@ -281,8 +281,10 @@ class AddReviewForm(forms.Form):
 class EditReviewForm(forms.Form):
 	rating = forms.CharField(
 		widget = forms.Select(
-			choices=STARS,
-			attrs={'class': 'form-control'}
+			attrs={
+				"class":"form-control"
+			},
+			choices=STARS
 		),
 		label='Rating',
 		required=True
@@ -349,8 +351,8 @@ class EditIssueForm(forms.Form):
 	issue_type = forms.CharField(
 		label='Issue Type',
 		widget=forms.Select(
-			choices=ISSUE_CHOICES,
-			attrs={'class': 'form-control'}
+			attrs={'class': 'form-control'},
+			choices=ISSUE_CHOICES
 		),
 		required=True
 	)
