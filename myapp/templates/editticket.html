@@ -13,7 +13,11 @@
                 </table>
                 <br>
                 <input type="submit" class="btn btn-primary" value="Confirm Edits">
+                {% if title == "ODIT - Resolve Ticket" %}
+                <a href="/viewmyissues.html" class="btn btn-secondary">Cancel</a>
+                {% else %}
 				<a href="/viewmysubmittedissues.html" class="btn btn-secondary">Cancel</a>
+                {% endif %}
                 </div>
             </form>
         </div>
