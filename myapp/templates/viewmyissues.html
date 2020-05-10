@@ -37,30 +37,40 @@
             <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
                 <div class="card-body">
                     <h5>Request type: {{ i.issue_type }}</h5>
-						<div class="border border-secondary px-2 mb-2">
-							<p>{{ i.description|linebreaks }}</p>
-						</div>
-						<p>Request solved? {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
+                        <div class="border border-secondary px-2 mb-2">
+                            <p>{{ i.description|linebreaks }}</p>
+                        </div>
+                        <p>Request solved? {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
                         {% if i.is_solved == False %}
                             <a class="btn btn-success" href="/resolve/{{i.id}}">Resolve?</a>
                         {% else %}
                             <p>Resolution: {{ i.resolution }}</p>
                         {% endif %}
-						<hr>
-						<h4>Request details:</h4>
-						<div style="font-size: 14px;">
-						<table class="table table-bordered">
-						<tr>
-							<th>
-								Date Created:
-							</th>
-						</tr>
-						<tr>
-							<td>
-								<p>{{ i.date_created }}</p>
-							</td>
-						</tr>
-						</table>
+                        <hr>
+                        <h4>Request details:</h4>
+                        <div style="font-size: 14px;">
+                        <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                Date Created:
+                            </th>
+                            <th>
+                                Affected User:
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>{{ i.date_created }}</p>
+                            </td>
+                            <td>
+                                <p>
+                                    <a class="btn btn-secondary" href="viewprofile/{{ i.affected_user.id }}">
+                                        {{ i.affected_user }}
+                                    </a>
+                                </p>
+                            </td>
+                        </tr>
+                        </table>
                 </div>
             </div>
         </div>

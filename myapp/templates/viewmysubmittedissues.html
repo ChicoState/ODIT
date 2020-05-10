@@ -63,11 +63,11 @@
 							<td>
 								<p>
 									{% if issue.assigned_user %}
-									<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">
-									{{ issue.assigned_user }}
-									</a>
+										<a class="btn btn-secondary" href="viewprofile/{{ issue.assigned_user.id }}">
+											{{ issue.assigned_user }}
+										</a>
 									{% else %}
-									None at the moment
+										None at the moment
 									{% endif %}
 								</p>
 							</td>

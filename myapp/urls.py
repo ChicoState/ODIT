@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path  #, include
 from django.contrib.auth import views as auth_views
 
 from . import views
@@ -24,18 +24,18 @@ urlpatterns = [
     path('index.html', views.index),
     path('submit.html', views.submit),
     path('viewissues.html', views.viewissues),
-	path('viewmyissues.html', views.viewmyissues),
+    path('viewmyissues.html', views.viewmyissues),
     path('viewmysubmittedissues.html', views.viewmysubmittedissues),
-	path('viewissues/assign/<int:issue_id>', views.self_assign),
+    path('viewissues/assign/<int:issue_id>', views.self_assign),
     path('resolve/<int:id>', views.resolve_ticket),
     path('editticket/<int:id>', views.edit_ticket),
     path('aboutodit.html', views.about),
-	path('profile.html',views.profile_page),
-	path('profile/edit.html',views.edit_profile),
-	path('profile/become_technician',views.become_technician),
-	path('viewtechnicians.html',views.view_technicians),
-	path('viewprofile/<int:user_id>',views.view_profile),
-	path('editreview/<int:id>',views.edit_review),
+    path('profile.html', views.profile_page),
+    path('profile/edit.html', views.edit_profile),
+    path('profile/become_technician', views.become_technician),
+    path('viewtechnicians.html', views.view_technicians),
+    path('viewprofile/<int:user_id>', views.view_profile),
+    path('editreview/<int:id>', views.edit_review),
     path('login/', auth_views.LoginView.as_view()),
     path('register/', views.register),
     path('logout/', views.logoff)
