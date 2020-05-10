@@ -39,6 +39,10 @@ a {
     color: #3c3c3c;
     background-color: #dfdfdf;
   }
+  .card-header.bg-light {
+    color: #3c3c3c;
+    background-color: #dfdfdf;
+  }
   .card.bg-light > .card-body {
     color: #3c3c3c;
     background-color: #c2c2c2;
