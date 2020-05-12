@@ -1,8 +1,14 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.test import Client
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth import logout
+from django.conf import settings
 from . import models
 from . import forms
+from .views import index, submit, viewissues, viewmyissues, \
+self_assign, register, logoff, profile_page, edit_profile, \
+become_technician, view_technicians, view_profile, viewmysubmittedissues, \
+edit_review, resolve_ticket, edit_ticket, about
 from model_mommy import mommy
 
 # Create your tests here.
@@ -113,66 +119,89 @@ class ModelTests(TestCase):
 
 
 class ViewsTests(TestCase):
-    # Utilizing status code 302 for pages that require authentication. HTTP code
-    # 302 indicates the requested page was found. This code is used mainly
-    # for redirects, but in our case a code of 302 indicates that the page is found
-    # but the user cannot view it due to the '@login_required' decorators
-    # we have placed over particular functions.
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username='testuser', email='test@test.com', password='supersecretpass')
+        self.user_id = self.user.id
 
-    def test_index_view(self):
-        c = Client()
-        response = c.get('/index.html')
-        self.assertEqual(response.status_code, 200)
-
+    def test_index_view_authenticated(self):
+        request = self.factory.get('/index.html')
+        request.user = self.user
+        response = index(request)
+        self.assertEqual(response.status_code, 200) 
+    
+    def test_index_view_unauthenticated(self):
+        request = self.factory.get('/index.html')
+        request.user = AnonymousUser()
+        response = index(request)
+        self.assertEqual(response.status_code, 200) 
+    
     def test_submit_view(self):
-        c = Client()
-        response = c.get('/submit.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/submit.html')
+        request.user = self.user
+        response = submit(request)
+        self.assertEqual(response.status_code, 200) 
 
     def test_view_issues(self):
-        c = Client()
-        response = c.get('/viewissues.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/viewissues.html')
+        request.user = self.user
+        response = viewissues(request) 
+        self.assertEqual(response.status_code, 200)
 
     def test_view_my_submitted_issues(self):
-        c = Client()
-        response = c.get('/viewmysubmittedissues.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/viewmysubmittedissues.html')
+        request.user = self.user
+        response = viewmysubmittedissues(request) 
+        self.assertEqual(response.status_code, 200)
 
     def test_view_edit_ticket(self):
-        c = Client()
-        response = c.get('/editticket/1')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/editticket/1')
+        request.user = self.user
+        response = edit_ticket(request, 1) 
+        self.assertEqual(response.status_code, 302)  # we're checking to see if this page exists
 
     def test_view_edit_review(self):
-        c = Client()
-        response = c.post('/editreview/1', {'rating': 5, 'review': "you rock!"})
+        request = self.factory.get('/editreview/1')
+        request.user = self.user
+        response = edit_review(request, self.user_id) 
         self.assertEqual(response.status_code, 302)
 
     def test_view_my_issues(self):
-        c = Client()
-        response = c.get('/viewmyissues.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/viewmyissues.html')
+        request.user = self.user
+        response = viewmyissues(request) 
+        self.assertEqual(response.status_code, 200)
 
     def test_view_technicians(self):
-        c = Client()
-        response = c.get('/viewtechnicians.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/viewtechnicians.html')
+        request.user = self.user
+        response = view_technicians(request) 
+        self.assertEqual(response.status_code, 200)
 
-    def test_view_about(self):
-        c = Client()
-        response = c.get('/aboutodit.html')
+    def test_view_about_authenticated(self):
+        request = self.factory.get('/aboutodit.html')
+        request.user = self.user
+        response = about(request) 
+        self.assertEqual(response.status_code, 200)
+    
+    def test_view_about_unauthenticated(self):
+        request = self.factory.get('/aboutodit.html')
+        request.user = AnonymousUser()
+        response = about(request) 
         self.assertEqual(response.status_code, 200)
 
     def test_view_profile(self):
-        c = Client()
-        response = c.get('/profile.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/profile.html')
+        request.user = self.user
+        response = view_profile(request, self.user_id) 
+        self.assertEqual(response.status_code, 200)
 
     def test_view_edit_profile(self):
-        c = Client()
-        response = c.get('/profile/edit.html')
-        self.assertEqual(response.status_code, 302)
+        request = self.factory.get('/profile/edit.html')
+        request.user = self.user
+        response = edit_profile(request) 
+        self.assertEqual(response.status_code, 200)
 
     def test_view_login(self):
         c = Client()
@@ -180,6 +209,30 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_register(self):
-        c = Client()
-        response = c.get('/register/')
+        request = self.factory.get('/register/')
+        response = register(request) 
         self.assertEqual(response.status_code, 200)
+
+    def test_view_self_assign(self):
+        request = self.factory.get('/viewissues/assign/1')
+        request.user = self.user
+        response = self_assign(request, 1)
+        self.assertEqual(response.status_code, 302)
+    
+    def test_view_profile_page(self):
+        request = self.factory.get('/profile.html')
+        request.user = self.user
+        response = profile_page(request)
+        self.assertEqual(response.status_code, 200)
+    
+    def test_view_become_technician(self):
+        request = self.factory.get('/profile/becometechnician')
+        request.user = self.user
+        response = become_technician(request)
+        self.assertEqual(response.status_code, 302)
+    
+    def test_view_resolve_ticket(self):
+        request = self.factory.get('/resolve/1')
+        request.user = self.user
+        response = resolve_ticket(request, 1)
+        self.assertEqual(response.status_code, 302)
