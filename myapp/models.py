@@ -24,6 +24,7 @@ class Issue_Model(models.Model):
     )
     is_solved = models.BooleanField(null=True)  # 0 for unsolved, 1 for solved
     resolution = models.CharField(max_length=240, null=True)
+
     def __unicode__(self):
         return self.title
 
@@ -37,6 +38,7 @@ class Profile(models.Model):
     rating_sum = models.IntegerField(default=0)
     rating_count = models.IntegerField(default=0)
     rating_avg = models.FloatField(default=0)
+
     def __unicode__(self):
         return self.user
 
@@ -71,5 +73,6 @@ class Review(models.Model):
         ]
     )
     review = models.CharField(max_length=240, null=True)
+
     def __unicode__(self):
         return self.writer
