@@ -57,43 +57,45 @@
             <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
                 <div class="card-body">
                     <h5>Request type: {{ i.issue_type }}</h5>
-						<div class="border border-secondary px-2 mb-2">
-							<p>{{ i.description|linebreaks }}</p>
-						</div>
-						<p>Request solved? {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
-						<hr>
-						<h4>Request details:</h4>
-						<div style="font-size: 14px;">
-						<table class="table table-bordered">
-						<tr>
-							<th>
-								Date Created:
-							</th>
-							<th>
-								Assigned Technician:
+                        <div class="border border-secondary px-2 mb-2">
+                            <p>{{ i.description|linebreaks }}</p>
+                        </div>
+                        <p>Request solved? {% if i.is_solved == True %} Yes {% else %} No {% endif %}</p>
+                        <hr>
+                        <h4>Request details:</h4>
+                        <div style="font-size: 14px;">
+                        <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                Date Created:
+                            </th>
+                            <th>
+                                Assigned Technician:
                                 {% if is_technician and user != i.assigned_user and user != i.affected_user and i.is_solved == False %}
-                                <a class="btn btn-success" href="/viewissues/assign/{{i.id}}">Assign yourself to this request</a>
+                                    <a class="btn btn-success" href="/viewissues/assign/{{i.id}}">
+                                        Assign yourself to this request
+                                    </a>
                                 {% endif %}
-							</th>
-						</tr>
-						<tr>
-							<td>
-								<p>{{ i.date_created }}</p>
-							</td>
-							<td>
-								<p>
-									{% if i.assigned_user %}
-									<a class="btn btn-secondary" href="viewprofile/{{ i.assigned_user.id }}">
-									{{ i.assigned_user }}
-									</a>
-									{% else %}
-									None at the moment
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>{{ i.date_created }}</p>
+                            </td>
+                            <td>
+                                <p>
+                                    {% if i.assigned_user %}
+                                        <a class="btn btn-secondary" href="viewprofile/{{ i.assigned_user.id }}">
+                                            {{ i.assigned_user }}
+                                        </a>
+                                    {% else %}
+                                    None at the moment
                                     
-									{% endif %}
-								</p>
-							</td>
-						</tr>
-						</table>
+                                    {% endif %}
+                                </p>
+                            </td>
+                        </tr>
+                        </table>
 
 
                     {% comment %} <p class="">{{ i.description|linebreaks }}</p>

@@ -1,5 +1,5 @@
 # ODIT (OnDemandIT)
-The purpose of this project is to provide better accessability to users for finding IT support
+The purpose of this project is to provide better accessibility to users for finding IT support
 
 ### Developers
 * Cody Evans, Codemastr3
