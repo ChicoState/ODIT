@@ -2,48 +2,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-	{% include 'bootstrap_css.html' %}
+    {% include 'bootstrap_css.html' %}
     <title>{% block title %}{{ title }}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top">
-		<a class="navbar-brand" href="/">On Demand IT</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsiblebuttons"><span class="navbar-toggler-icon"></span></button>
-		<div class="collapse navbar-collapse" id="collapsiblebuttons">
-			<ul class="nav navbar-nav">
-				{% if user.is_authenticated %}
-					<li class="nav-item"><a class="nav-link" href="/submit.html">Submit Request</a></li>
-					<li class="nav-item"><a class="nav-link" href="/viewmysubmittedissues.html">View my Submitted Requests</a></li>
-					<li class="nav-item"><a class="nav-link" href="/viewissues.html">View All Requests</a></li>
-					{% if is_technician %}
-						<li class="nav-item"><a class="nav-link" href="/viewmyissues.html">View My Assignments</a></li>
-					{% endif %}
-					<li class="nav-item"><a class="nav-link" href="/viewtechnicians.html">Find a Technician</a></li>
-				{% endif %}
-				<li class="nav-item"><a class="nav-link" href="/aboutodit.html" id="left">About Us</a></li>
-			</ul>
-			<ul class="nav navbar-nav ml-auto">
-				{% if user.is_authenticated %}
-					<li class="nav-item"><a class="nav-link" href="/profile.html">Welcome back, {{ user }}!</a></li>
-					<li class="nav-item"><a class="nav-link" href="/logout">🔓<span></span>Log Out</a></li>
-				{% else %}
-					<li class="nav-item"><a class="nav-link" href="/register"><span>👤</span>Sign Up</a></li>
-					<li class="nav-item"><a class="nav-link" href="/login">🔒<span></span>Log In</a></li>
-				{% endif %}
-			</ul>
-		</div>
+        <a class="navbar-brand" href="/">On Demand IT</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsiblebuttons"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="collapsiblebuttons">
+            <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="/submit.html">Submit Request</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/viewmysubmittedissues.html">View my Submitted Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/viewissues.html">View All Requests</a></li>
+                    {% if is_technician %}
+                        <li class="nav-item"><a class="nav-link" href="/viewmyissues.html">View My Assignments</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="/viewtechnicians.html">Find a Technician</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="nav-link" href="/aboutodit.html" id="left">About Us</a></li>
+            </ul>
+            <ul class="nav navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="/profile.html">Welcome back, {{ user }}!</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">🔓<span></span>Log Out</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/register"><span>👤</span>Sign Up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">🔒<span></span>Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
-	<br>
-	<br>
-	<br>
+    <br>
+    <br>
+    <br>
 
     {% block content %}
     {% endblock %}
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	
-	{% include 'bootstrap_js.html' %}
+    
+    {% include 'bootstrap_js.html' %}
 </body>
 </html>
